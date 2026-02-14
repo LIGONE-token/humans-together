@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Activity | Humans Together</title>
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  background:#0b0e11;
+  color:#e5e7eb;
+  padding:40px 20px;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+}
+
+h1{
+  text-align:center;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#9ca3af;
+  margin-bottom:30px;
+}
+
+.feed{
+  background:#111827;
+  border-radius:14px;
+  padding:20px;
+}
+
+.item{
+  padding:16px;
+  border-bottom:1px solid #1f2933;
+}
+
+.item:last-child{
+  border-bottom:none;
+}
+
+.type{
+  font-size:12px;
+  font-weight:600;
+  margin-bottom:5px;
+}
+
+.help{
+  color:#f87171;
+}
+
+.offer{
+  color:#60a5fa;
+}
+
+.location{
+  font-size:13px;
+  color:#9ca3af;
+  margin-bottom:5px;
+}
+
+.text{
+  margin-bottom:6px;
+}
+
+.time{
+  font-size:12px;
+  color:#6b7280;
+}
+
+.back{
+  margin-top:25px;
+  text-align:center;
+  cursor:pointer;
+  color:#9ca3af;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Community Activity</h1>
+<div class="subtitle">Real people. Real needs. Real support.</div>
+
+<div class="feed" id="feed"></div>
+
+<div class="back" onclick="location.href='index.html'">
+← Back to Humans Together
+</div>
+
+</div>
+
+<script>
+/*
+   DEMO DATA
+   Später ersetzen wir das durch echte Daten
+*/
+
+const data = [
+{
+type:"help",
+location:"Berlin, Germany",
+text:"Need help moving furniture this weekend",
+time:"2 hours ago"
+},
+{
+type:"offer",
+location:"Solothurn, Switzerland",
+text:"Offering free language tutoring online",
+time:"5 hours ago"
+},
+{
+type:"help",
+location:"Madrid, Spain",
+text:"Looking for emotional support group",
+time:"1 day ago"
+}
+];
+
+const feed = document.getElementById("feed");
+
+data.forEach(item=>{
+const div = document.createElement("div");
+div.className="item";
+
+const typeLabel =
+item.type === "help"
+? '<div class="type help">HELP REQUEST</div>'
+: '<div class="type offer">HELP OFFER</div>';
+
+div.innerHTML = `
+${typeLabel}
+<div class="location">${item.location}</div>
+<div class="text">${item.text}</div>
+<div class="time">${item.time}</div>
+`;
+
+feed.appendChild(div);
+});
+</script>
+
+</body>
+</html>
