@@ -3,100 +3,34 @@ const supabase = window.supabase.createClient(
 "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
 );
 
-/* =========================
-USER AUTO CREATE
-========================= */
-async function ensureUser(){
+async function loadFeed(){
 
- const {data:{user}} = await supabase.auth.getUser();
- if(!user) return null;
+const { data } = await supabase
+.from("humans.posts")
+.select("*")
+.order("created_at",{ascending:false})
+.limit(10);
 
- const {data} = await supabase
-  .from("humans_users")
-  .select("id")
-  .eq("id", user.id)
-  .single();
+const feed=document.getElementById("feed");
+if(!feed) return;
 
- if(!data){
-   await supabase.from("humans_users").insert({ id:user.id });
- }
+feed.innerHTML="";
 
- return user;
-}
+data?.forEach(post=>{
+const type =
+post.type==="help_request"
+? "Help requested"
+: "Help offered";
 
-/* =========================
-CREATE POST
-========================= */
-async function createPost(type,title,desc,region){
+const div=document.createElement("div");
+div.className="feed-item";
 
- const user = await ensureUser();
- if(!user) return alert("Login required");
+div.innerHTML=`
+<strong>${post.region || "Unknown location"}</strong><br>
+${post.title || ""}
+<div class="status">${type}</div>
+`;
 
- await supabase.from("humans_posts").insert({
-  user_id:user.id,
-  type,
-  title,
-  description:desc,
-  region
- });
-}
-
-/* =========================
-LOAD POSTS
-========================= */
-async function loadPosts(){
-
- const {data} = await supabase
-  .from("humans_posts")
-  .select("*")
-  .order("created_at",{ascending:false});
-
- return data || [];
-}
-
-/* =========================
-RESPOND TO HELP
-========================= */
-async function respond(postId,message){
-
- const user = await ensureUser();
- if(!user) return;
-
- await supabase.from("humans_responses").insert({
-  post_id:postId,
-  user_id:user.id,
-  message
- });
-}
-
-/* =========================
-PRIVATE MESSAGE
-========================= */
-async function sendMessage(to,message){
-
- const user = await ensureUser();
- if(!user) return;
-
- await supabase.from("humans_messages").insert({
-  sender:user.id,
-  receiver:to,
-  message
- });
-}
-
-/* =========================
-CONFIRM HELP
-========================= */
-async function confirmHelp(postId,helperId){
-
- const user = await ensureUser();
-
- await supabase.from("humans_help_confirmations").insert({
-  post_id:postId,
-  helper_id:helperId,
-  requester_id:user.id,
-  confirmed:true
- });
-
- await supabase.rpc("increase_trust",{ uid:helperId });
+feed.appendChild(div);
+});
 }
