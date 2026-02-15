@@ -1,79 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>I need help</title>
-
-<style>
-body{margin:0;font-family:system-ui;background:#f6f8fb}
-.wrap{max-width:700px;margin:auto;padding:40px 20px}
-.card{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
-input{width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid #ddd}
-button{padding:12px 16px;border:0;border-radius:8px;background:#10b981;color:white;font-weight:700;cursor:pointer}
-#status{margin-top:15px;font-weight:700}
-</style>
-</head>
-
+<html>
 <body>
-
-<div class="wrap">
-<div class="card">
-
-<h2>I need help</h2>
-
-<form id="form">
-<input id="title" placeholder="Describe your situation" required>
-<input id="region" placeholder="Location" required>
-<button type="submit">Submit</button>
-</form>
-
-<div id="status">Ready</div>
-
-</div>
-</div>
+<h1>Request Help</h1>
+<input id="title" placeholder="Describe request">
+<button onclick="post()">Submit</button>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 
 <script>
-const supabase = window.supabase.createClient(
-"https://hwpeegcsdgxgcybuosfv.supabase.co",
-"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
-);
-
-const statusBox = document.getElementById("status");
-
-document.getElementById("form").addEventListener("submit", async (e)=>{
-e.preventDefault();
-
-statusBox.textContent="Checking login...";
-
-const { data:{ user } } = await supabase.auth.getUser();
-
-if(!user){
-statusBox.textContent="ERROR: Login required";
-return;
+const supabase=window.supabaseClient;
+(async()=>{
+const {data:{user}}=await supabase.auth.getUser();
+if(!user)location.href="login.html";
+})();
+async function post(){
+await supabase.schema("humans").from("posts").insert({
+type:"help_request",title:title.value});
+location.href="activity.html";
 }
-
-statusBox.textContent="Saving...";
-
-const { error } = await supabase
-.schema("humans")
-.from("posts")
-.insert({
-user_id:user.id,
-type:"help_request",
-title:document.getElementById("title").value,
-region:document.getElementById("region").value
-});
-
-if(error){
-statusBox.textContent="ERROR: "+error.message;
-}else{
-statusBox.textContent="SUCCESS ✔ Saved";
-}
-});
 </script>
-
 </body>
 </html>
