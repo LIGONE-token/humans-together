@@ -1,15 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Dashboard</title>
+
+<style>
+body{
+margin:0;
+font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+background:#f6f8fb;
+color:#111827;
+}
+
+/* ZENTRIERTER CONTAINER */
+.wrap{
+max-width:760px;
+margin:40px auto;
+padding:20px;
+}
+
+/* KARTE */
+.card{
+background:#ffffff;
+border:1px solid #e5e7eb;
+border-radius:14px;
+padding:20px;
+margin-top:20px;
+}
+
+/* BUTTON */
+button{
+padding:12px 16px;
+border:none;
+border-radius:10px;
+background:#2563eb;
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+nav{
+margin-top:20px;
+}
+
+nav a{
+margin-right:15px;
+text-decoration:none;
+color:#2563eb;
+font-weight:600;
+}
+</style>
+</head>
+
 <body>
+
+<div class="wrap">
+
 <h1>User Dashboard</h1>
+
+<div class="card" id="userCard">
+Loading user...
+</div>
+
+<div class="card">
+<h2>Navigation</h2>
+<nav>
+<a href="index.html">Home</a>
+<a href="activity.html">Activity</a>
+<a href="help.html">Request Help</a>
+<a href="offer.html">Offer Help</a>
+</nav>
+</div>
+
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
+
 <script>
-const supabase=window.supabaseClient;
+const supabase = window.supabaseClient;
+const userCard = document.getElementById("userCard");
+
 (async()=>{
-const {data:{user}}=await supabase.auth.getUser();
-if(!user)location.href="login.html";
+const { data:{ user } } = await supabase.auth.getUser();
+
+if(!user){
+location.href="login.html";
+return;
+}
+
+userCard.innerHTML = `
+<h2>Welcome</h2>
+<p><strong>Email:</strong> ${user.email}</p>
+<br>
+<button onclick="logout()">Logout</button>
+`;
 })();
+
+async function logout(){
+await supabase.auth.signOut();
+location.href="index.html";
+}
 </script>
+
 </body>
 </html>
