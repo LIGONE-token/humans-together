@@ -43,29 +43,13 @@ margin:auto;
 padding:20px;
 }
 
-header{
-text-align:center;
-}
+header{text-align:center;}
+h1{margin:10px 0;}
 
-h1{
-margin:10px 0;
-}
+.tagline{color:var(--green);font-weight:700;}
+.desc{color:var(--muted);margin-bottom:20px;}
 
-.tagline{
-color:var(--green);
-font-weight:700;
-}
-
-.desc{
-color:var(--muted);
-margin-bottom:20px;
-}
-
-.actions{
-display:grid;
-gap:10px;
-margin:20px 0;
-}
+.actions{display:grid;gap:10px;margin:20px 0;}
 
 .btn{
 border:none;
@@ -99,15 +83,8 @@ border-radius:999px;
 border:1px solid var(--line);
 }
 
-.badge-help{
-background:#ecfdf5;
-color:#065f46;
-}
-
-.badge-offer{
-background:#eff6ff;
-color:#1e3a8a;
-}
+.badge-help{background:#ecfdf5;color:#065f46;}
+.badge-offer{background:#eff6ff;color:#1e3a8a;}
 </style>
 </head>
 
@@ -147,6 +124,7 @@ Learn about LIGONE LIG1 →
 
 </div>
 
+<!-- SUPABASE (einmal laden) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -154,6 +132,8 @@ const supabase = window.supabase.createClient(
 "https://hwpeegcsdgxgcybuosfv.supabase.co",
 "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
 );
+
+/* ===== ACTIVITY FEED ===== */
 
 async function loadActivity(){
 
@@ -166,15 +146,8 @@ const { data, error } = await supabase
 
 const feed=document.getElementById("feed");
 
-if(error){
-feed.innerHTML="Activity unavailable";
-return;
-}
-
-if(!data || data.length===0){
-feed.innerHTML="No activity yet";
-return;
-}
+if(error){ feed.innerHTML="Activity unavailable"; return; }
+if(!data || data.length===0){ feed.innerHTML="No activity yet"; return; }
 
 data.forEach(post=>{
 
@@ -190,20 +163,17 @@ ${post.title || ""}<br>
 ${badge}
 `;
 feed.appendChild(div);
+
 });
 }
 
 loadActivity();
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-const supabase = window.supabase.createClient(
-"https://hwpeegcsdgxgcybuosfv.supabase.co",
-"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
-);
+/* ===== LOGIN STATUS ===== */
 
 (async () => {
+
+try{
 const { data:{ user } } = await supabase.auth.getUser();
 
 if(user){
@@ -217,6 +187,10 @@ Logged in as ${user.email}
 `;
 document.querySelector(".wrap").appendChild(div);
 }
+}catch(e){
+console.log("Auth check skipped");
+}
+
 })();
 
 async function logout(){
