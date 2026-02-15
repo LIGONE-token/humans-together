@@ -1,157 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- GOOGLE SEARCH CONSOLE VERIFICATION -->
 <meta name="google-site-verification" content="YRRh6jvBiPgsqxbRXpFUyRfganm4lP1V1yTXE7MvlhQ" />
 
-<title>Humans Together – Global Help Community</title>
+<title>Humans Together | Global Human Support Network</title>
 
 <meta name="description"
-content="Humans Together is a global platform where people help each other. Request help, offer support, and build trust through real human cooperation." />
+content="Humans Together connects people worldwide to help each other. Find support, offer help, and build stronger communities everywhere." />
 
-<meta name="robots" content="index,follow">
 <link rel="canonical" href="https://ligone-token.github.io/humans-together/">
 
-<!-- Open Graph -->
-<meta property="og:title" content="Humans Together – Global Help Community">
-<meta property="og:description" content="Request help. Offer help. Build trust. A real human support network.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://ligone-token.github.io/humans-together/">
-<meta property="og:image" content="https://ligone-token.github.io/humans-together/og-image.png">
-
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Humans Together">
-<meta name="twitter:description" content="A global human support network">
-
-<!-- Structured Data -->
-<script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "WebSite",
- "name": "Humans Together",
- "url": "https://ligone-token.github.io/humans-together/",
- "description": "Global human help platform"
-}
-</script>
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Humans Together" />
+<meta property="og:description" content="Together we help. A global space where people support each other." />
+<meta property="og:url" content="https://ligone-token.github.io/humans-together/" />
+<meta property="og:image" content="https://ligone-token.github.io/humans-together/og-image.png" />
 
 <style>
+:root{
+--bg:#f6f8fb;
+--card:#ffffff;
+--text:#111827;
+--muted:#6b7280;
+--line:#e5e7eb;
+--green:#10b981;
+--blue:#2563eb;
+}
+
 body{
 margin:0;
 font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-background:#0b0e11;
-color:#e5e7eb;
+background:var(--bg);
+color:var(--text);
+}
+
+.wrap{
+max-width:760px;
+margin:auto;
+padding:20px;
 }
 
 header{
-padding:60px 20px;
 text-align:center;
-background:#111827;
 }
 
 h1{
-font-size:42px;
-margin-bottom:10px;
+margin:10px 0;
 }
 
 .tagline{
-font-size:20px;
-color:#10b981;
+color:var(--green);
+font-weight:700;
 }
 
-main{
-max-width:900px;
-margin:auto;
-padding:40px 20px;
-line-height:1.6;
+.desc{
+color:var(--muted);
+margin-bottom:20px;
 }
 
-.section{
-margin-bottom:40px;
+.actions{
+display:grid;
+gap:10px;
+margin:20px 0;
 }
 
-button{
-padding:16px 22px;
-margin:8px;
+.btn{
 border:none;
 border-radius:12px;
-font-size:16px;
+padding:14px;
+font-weight:700;
 cursor:pointer;
 }
 
-.primary{
-background:#10b981;
-color:white;
+.btn-help{background:var(--green);color:white}
+.btn-offer{background:var(--blue);color:white}
+
+.card{
+background:var(--card);
+border:1px solid var(--line);
+border-radius:14px;
+padding:14px;
+margin-top:10px;
 }
 
-.secondary{
-background:#1f2937;
-color:white;
+.feed-item{
+padding:10px 0;
+border-bottom:1px solid var(--line);
 }
 
-nav{
-margin-top:30px;
+.badge{
+font-size:11px;
+font-weight:800;
+padding:4px 8px;
+border-radius:999px;
+border:1px solid var(--line);
 }
 
-footer{
-text-align:center;
-padding:40px;
-opacity:0.6;
-font-size:14px;
+.badge-help{
+background:#ecfdf5;
+color:#065f46;
+}
+
+.badge-offer{
+background:#eff6ff;
+color:#1e3a8a;
 }
 </style>
-
 </head>
 
 <body>
+<div class="wrap">
 
 <header>
 <h1>Humans Together</h1>
-<div class="tagline">A global platform where people help people</div>
-
-<nav>
-<button class="primary" onclick="location.href='activity.html'">View Community Activity</button>
-<button class="secondary" onclick="location.href='post-create.html'">Request or Offer Help</button>
-<button class="secondary" onclick="location.href='login.html'">Login</button>
-</nav>
+<div class="tagline">Together we help</div>
+<p class="desc">
+You are not alone. A global space where people connect and support each other.
+</p>
 </header>
 
-<main>
+<section class="actions">
+<button class="btn btn-help" onclick="location.href='help.html'">I need help</button>
+<button class="btn btn-offer" onclick="location.href='offer.html'">I want to help</button>
+<button class="btn" onclick="location.href='activity.html'">Community Activity</button>
+</section>
 
-<div class="section">
-<h2>What is Humans Together?</h2>
+<div class="card">
+<h2>🌱 Community Support</h2>
 <p>
-Humans Together is a real human support network.
-People can request help, offer help, collaborate, and build trust through verified cooperation.
+Humans Together is supported by independent community initiatives that believe in cooperation,
+fairness and long-term social stability.
 </p>
+
+<a href="ligone.html" style="font-weight:800;color:#2563eb;text-decoration:none">
+Learn about LIGONE LIG1 →
+</a>
 </div>
 
-<div class="section">
-<h2>How it works</h2>
-<ul>
-<li>Create a help request or offer support</li>
-<li>Connect with real people</li>
-<li>Complete the help process</li>
-<li>Build trust through verified experience</li>
-</ul>
+<div class="card">
+<h2>🌍 Live Community Activity</h2>
+<div id="feed"></div>
 </div>
 
-<div class="section">
-<h2>Why this platform exists</h2>
-<p>
-Humans Together reconnects people through real cooperation, transparency and trust-based support worldwide.
-</p>
 </div>
 
-</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<footer>
-Humans Together – Global Human Support Network
-</footer>
+<script>
+const supabase = window.supabase.createClient(
+"https://hwpeegcsdgxgcybuosfv.supabase.co",
+"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
+);
+
+async function loadActivity(){
+
+const { data, error } = await supabase
+.schema("humans")
+.from("posts")
+.select("type,title,region,created_at")
+.order("created_at",{ascending:false})
+.limit(5);
+
+const feed=document.getElementById("feed");
+
+if(error){
+feed.innerHTML="Activity unavailable";
+return;
+}
+
+if(!data || data.length===0){
+feed.innerHTML="No activity yet";
+return;
+}
+
+data.forEach(post=>{
+
+const badge = post.type==="help_request"
+? '<span class="badge badge-help">HELP REQUEST</span>'
+: '<span class="badge badge-offer">HELP OFFER</span>';
+
+const div=document.createElement("div");
+div.className="feed-item";
+div.innerHTML=`
+<strong>${post.region || ""}</strong><br>
+${post.title || ""}<br>
+${badge}
+`;
+feed.appendChild(div);
+});
+}
+
+loadActivity();
+</script>
 
 </body>
 </html>
