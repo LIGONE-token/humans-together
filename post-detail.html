@@ -1,93 +1,136 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Post</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post | Humans Together</title>
 <style>
-body{background:#0b0e11;color:white;font-family:system-ui;padding:20px}
-button{padding:12px;margin-top:10px;border:0;border-radius:8px;background:#10b981;color:white;cursor:pointer}
-.card{background:#111827;padding:20px;border-radius:12px}
+body{margin:0;background:#0b0e11;color:#e5e7eb;font-family:system-ui;padding:20px}
+.top{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+a.btn{display:inline-block;padding:10px 14px;border-radius:12px;background:#111827;color:#e5e7eb;text-decoration:none}
+.card{max-width:900px;margin:auto;background:#111827;border-radius:14px;padding:20px}
+h1{margin:0 0 8px}
+.meta{color:#9ca3af;margin:6px 0 14px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+button{padding:12px 14px;border:0;border-radius:12px;cursor:pointer;font-weight:900}
+.green{background:#10b981;color:#fff}
+.blue{background:#3b82f6;color:#fff}
+.gray{background:#1f2937;color:#fff}
+#status{margin-top:12px;font-weight:800;color:#9ca3af}
 </style>
 </head>
-
 <body>
 
-<div class="card">
-<h2 id="title"></h2>
-<p id="desc"></p>
-<p id="region"></p>
-<p>Status: <strong id="status"></strong></p>
+<div class="top">
+  <a class="btn" href="activity.html">← Activity</a>
+  <a class="btn" href="post-create.html">Create</a>
+  <a class="btn" href="login.html">Login</a>
+  <a class="btn" href="dashboard.html">Dashboard</a>
+</div>
 
-<button onclick="offerHelp()">I can help</button>
-<button onclick="completeHelp()">Mark completed</button>
-<button onclick="rate()">Give trust ⭐</button>
+<div class="card">
+  <h1 id="t"></h1>
+  <div id="d"></div>
+  <div class="meta">
+    <span id="r"></span> • Status: <strong id="s"></strong>
+  </div>
+
+  <div class="actions">
+    <button class="green" onclick="offerHelp()">I can help</button>
+    <button class="blue" onclick="markCompleted()">Mark completed</button>
+    <button class="gray" onclick="giveTrust()">Give trust</button>
+  </div>
+
+  <div id="status"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 const supabase = window.supabase.createClient(
-"https://hwpeegcsdgxgcybuosfv.supabase.co",
-"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
+  "https://hwpeegcsdgxgcybuosfv.supabase.co",
+  "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
 );
 
-const postId = new URLSearchParams(location.search).get("id");
+const id = new URLSearchParams(location.search).get("id");
+const statusEl = document.getElementById("status");
 
 async function load(){
+  statusEl.textContent = "Loading…";
+  const { data, error } = await supabase
+    .schema("humans").from("posts")
+    .select("*")
+    .eq("id", id)
+    .single();
 
-const { data } = await supabase
-.schema("humans")
-.from("posts")
-.select("*")
-.eq("id", postId)
-.single();
+  if(error){
+    statusEl.textContent = "ERROR: " + error.message;
+    return;
+  }
 
-title.textContent=data.title;
-desc.textContent=data.description;
-region.textContent=data.region;
-status.textContent=data.status;
+  document.getElementById("t").textContent = data.title || "";
+  document.getElementById("d").textContent = data.description || "";
+  document.getElementById("r").textContent = data.region || "";
+  document.getElementById("s").textContent = data.status || "OPEN";
+  statusEl.textContent = "";
+}
+load();
+
+async function needLogin(){
+  const { data:{ user } } = await supabase.auth.getUser();
+  if(!user){ location.href="login.html"; return null; }
+  return user;
 }
 
 async function offerHelp(){
+  const user = await needLogin();
+  if(!user) return;
 
-const { data:{ user } } = await supabase.auth.getUser();
-if(!user) return alert("Login required");
+  statusEl.textContent="Saving helper…";
 
-await supabase.schema("humans").from("post_participants")
-.insert({post_id:postId,user_id:user.id,role:"helper"});
+  // participant table optional: if not present, this will show error text (not silent)
+  const { error: pe } = await supabase.schema("humans").from("post_participants")
+    .insert({ post_id:id, user_id:user.id, role:"helper" });
 
-await supabase.schema("humans").from("posts")
-.update({status:"IN_PROGRESS"})
-.eq("id",postId);
+  if(pe){ statusEl.textContent="ERROR: "+pe.message; return; }
 
-location.reload();
+  const { error: se } = await supabase.schema("humans").from("posts")
+    .update({ status:"IN_PROGRESS" })
+    .eq("id", id);
+
+  if(se){ statusEl.textContent="ERROR: "+se.message; return; }
+
+  statusEl.textContent="Saved ✔";
+  load();
 }
 
-async function completeHelp(){
+async function markCompleted(){
+  const user = await needLogin();
+  if(!user) return;
 
-await supabase.schema("humans").from("posts")
-.update({status:"COMPLETED"})
-.eq("id",postId);
+  statusEl.textContent="Completing…";
 
-location.reload();
+  const { error } = await supabase.schema("humans").from("posts")
+    .update({ status:"COMPLETED" })
+    .eq("id", id);
+
+  statusEl.textContent = error ? ("ERROR: "+error.message) : "Completed ✔";
+  load();
 }
 
-async function rate(){
+async function giveTrust(){
+  const user = await needLogin();
+  if(!user) return;
 
-const stars = prompt("Rating 1-5");
-const { data:{ user } } = await supabase.auth.getUser();
+  const rating = prompt("Trust rating 1–5");
+  if(!rating) return;
 
-await supabase.schema("humans").from("trust_ratings")
-.insert({
-post_id:postId,
-from_user:user.id,
-rating:stars
-});
+  statusEl.textContent="Saving trust…";
 
-alert("Trust saved");
+  const { error } = await supabase.schema("humans").from("trust_ratings")
+    .insert({ post_id:id, from_user:user.id, rating: parseInt(rating,10) });
+
+  statusEl.textContent = error ? ("ERROR: "+error.message) : "Trust saved ✔";
 }
-
-load();
 </script>
 </body>
 </html>
