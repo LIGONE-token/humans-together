@@ -76,10 +76,7 @@ const supabase = window.supabase.createClient(
   "https://hwpeegcsdgxgcybuosfv.supabase.co",
   "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
 );
-</script>
 
-
-<script>
 async function createPost(){
 
   const { data:{ user } } = await supabase.auth.getUser();
@@ -95,7 +92,8 @@ async function createPost(){
   const region = document.getElementById("region").value;
 
   const { error } = await supabase
-    .from("humans.posts")
+    .schema("humans")        // ✅ WICHTIG
+    .from("posts")           // ✅ WICHTIG
     .insert({
       user_id: user.id,
       type,
