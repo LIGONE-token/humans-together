@@ -1,29 +1,232 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="YRRh6jvBiPgsqxbRXpFUyRfganm4lP1V1yTXE7MvlhQ">
+
 <title>Humans Together</title>
+
+<style>
+
+/* ===== GLOBAL ===== */
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  background:#0b0e11;
+  color:#e5e7eb;
+}
+
+/* ===== PAGE WIDTH ===== */
+
+.wrapper{
+  max-width:1000px;
+  margin:auto;
+  padding:40px 20px;
+}
+
+/* ===== HERO ===== */
+
+.hero{
+  text-align:center;
+  margin-bottom:40px;
+}
+
+.hero h1{
+  font-size:42px;
+  margin:0;
+  letter-spacing:-0.5px;
+}
+
+.hero p{
+  color:#9ca3af;
+  margin-top:10px;
+  font-size:17px;
+}
+
+/* ===== ACTIONS ===== */
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+  margin-top:25px;
+}
+
+.btn{
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  font-size:15px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.primary{ background:#2563eb; color:white; }
+.primary:hover{ background:#1d4ed8; }
+
+.green{ background:#10b981; color:white; }
+.green:hover{ background:#059669; }
+
+.dark{ background:#111827; color:white; }
+.dark:hover{ background:#1f2933; }
+
+/* ===== GRID ===== */
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin-top:35px;
+}
+
+/* ===== CARD ===== */
+
+.card{
+  background:#111827;
+  padding:20px;
+  border-radius:14px;
+}
+
+.card h3{
+  margin-top:0;
+  font-size:18px;
+}
+
+/* ===== ACTIVITY ===== */
+
+.feed-item{
+  padding:10px 0;
+  border-bottom:1px solid #1f2933;
+  font-size:14px;
+}
+
+.feed-item:last-child{
+  border-bottom:none;
+}
+
+.status{
+  font-size:12px;
+  color:#10b981;
+}
+
+/* ===== FOOTER ===== */
+
+footer{
+  margin-top:40px;
+  text-align:center;
+  font-size:12px;
+  color:#6b7280;
+}
+
+/* ===== MOBILE ===== */
+
+@media(max-width:700px){
+
+.actions{
+  grid-template-columns:1fr;
+}
+
+.grid{
+  grid-template-columns:1fr;
+}
+
+.hero h1{
+  font-size:32px;
+}
+
+}
+
+</style>
 </head>
-<body style="background:#0b0e11;color:white;font-family:system-ui;padding:20px">
 
-<div id="auth"></div>
+<body>
 
+<div class="wrapper">
+
+<!-- HERO -->
+<div class="hero">
 <h1>Humans Together</h1>
-<p>Together we help.</p>
+<p>A global network where people help people.</p>
 
-<button onclick="location.href='help.html'">I need help</button>
-<button onclick="location.href='offer.html'">I want to help</button>
-<button onclick="location.href='activity.html'">Community Activity</button>
-
-<div style="margin-top:20px;padding:12px;background:#111827;border-radius:10px">
-<b>Community Support</b><br>
-<a href="ligone.html" style="color:#60a5fa">Learn about LIGONE LIG1</a>
+<div class="actions">
+<button class="btn green" onclick="location.href='help.html'">I need help</button>
+<button class="btn primary" onclick="location.href='offer.html'">I want to help</button>
+<button class="btn dark" onclick="location.href='activity.html'">Community activity</button>
+</div>
 </div>
 
-<h3>Live Activity</h3>
-<div id="feed"></div>
+<!-- CONTENT GRID -->
+<div class="grid">
 
+<!-- ACTIVITY -->
+<div class="card">
+<h3>Live Community Activity</h3>
+<div id="feed"></div>
+</div>
+
+<!-- SUPPORT -->
+<div class="card">
+<h3>Community Support</h3>
+<p>
+Humans Together grows through independent initiatives focused on cooperation and long-term social stability.
+</p>
+
+<a href="https://ligone-token.github.io/ligone-web/"
+style="color:#60a5fa;text-decoration:none;font-weight:600;">
+Learn about LIGONE LIG1 →
+</a>
+</div>
+
+</div>
+
+<footer>
+A global human support network
+</footer>
+
+</div>
+
+<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js"></script>
+
+<script>
+const supabase = window.supabase.createClient(
+"https://hwpeegcsdgxgcybuosfv.supabase.co",
+"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
+);
+
+async function loadActivity(){
+
+ const { data } = await supabase
+   .from("humans.posts")
+   .select("*")
+   .order("created_at",{ascending:false})
+   .limit(5);
+
+ const feed = document.getElementById("feed");
+ feed.innerHTML="";
+
+ data?.forEach(post=>{
+
+  const type =
+    post.type==="help_request"
+    ? "Help requested"
+    : "Help offered";
+
+  const div=document.createElement("div");
+  div.className="feed-item";
+  div.innerHTML=`
+    <strong>${post.region || "Unknown"}</strong><br>
+    ${post.title || ""}
+    <div class="status">${type}</div>
+  `;
+  feed.appendChild(div);
+ });
+}
+
+loadActivity();
+</script>
+
 </body>
 </html>
