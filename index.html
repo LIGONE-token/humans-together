@@ -5,233 +5,249 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- GOOGLE VERIFICATION -->
 <meta name="google-site-verification"
 content="YRRh6jvBiPgsqxbRXpFUyRfganm4lP1V1yTXE7MvlhQ" />
 
 <title>Humans Together | Global Human Support Network</title>
-
-<meta name="description"
-content="Humans Together is a global community platform where people can request help, offer support, and connect with others worldwide.">
-
+<meta name="description" content="Global community platform where people request help, offer support and build trust.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://ligone-token.github.io/humans-together/">
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="Humans Together">
-<meta property="og:description" content="Global human support platform.">
-<meta property="og:url" content="https://ligone-token.github.io/humans-together/">
 
 <style>
-body{
-margin:0;
-font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-background:#f6f8fb;
-color:#111827;
-}
-.wrap{
-max-width:760px;
-margin:40px auto;
-padding:20px;
-}
-.card{
-background:#fff;
-border:1px solid #e5e7eb;
-border-radius:14px;
-padding:20px;
-margin-top:20px;
-}
-button{
-padding:12px 16px;
-border:none;
-border-radius:10px;
-background:#2563eb;
-color:white;
-font-weight:600;
-cursor:pointer;
-margin-top:10px;
-}
-button.secondary{
-background:#e5e7eb;
-color:#111827;
-}
-input{
-width:100%;
-padding:12px;
-margin-top:8px;
-border-radius:8px;
-border:1px solid #d1d5db;
-}
+body{margin:0;font-family:system-ui;background:#f6f8fb;color:#111827}
+.wrap{max-width:760px;margin:40px auto;padding:20px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-top:20px}
+button{padding:12px;border:none;border-radius:10px;background:#2563eb;color:#fff;font-weight:600;cursor:pointer;margin-top:10px}
+button.gray{background:#e5e7eb;color:#111827}
+input,select{width:100%;padding:12px;margin-top:8px;border-radius:8px;border:1px solid #d1d5db}
 nav button{margin-right:10px}
 .hidden{display:none}
-.feed-item{padding:8px 0;border-bottom:1px solid #e5e7eb}
+.feed-item{padding:10px 0;border-bottom:1px solid #e5e7eb}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700;margin-left:6px}
+.trust-low{background:#fee2e2;color:#991b1b}
+.trust-mid{background:#fef3c7;color:#92400e}
+.trust-high{background:#dcfce7;color:#166534}
 </style>
 
 </head>
-
 <body>
 
 <div class="wrap">
 
 <nav>
-<button onclick="show('home')">Home</button>
-<button onclick="show('activity')">Activity</button>
-<button onclick="show('help')">Request Help</button>
-<button onclick="show('offer')">Offer Help</button>
-<button onclick="show('dashboard')">Dashboard</button>
-<button onclick="show('login')">Login</button>
+<button onclick="view('home')">Home</button>
+<button onclick="view('activity')">Activity</button>
+<button onclick="view('help')">Request Help</button>
+<button onclick="view('offer')">Offer Help</button>
+<button onclick="view('dashboard')">Dashboard</button>
+<button onclick="view('login')">Login</button>
 </nav>
 
-<div id="home" class="view">
+<!-- HOME -->
+<div id="home" class="page">
 <h1>Humans Together</h1>
-
-<h2>Global Human Support Platform</h2>
-<p>
-Humans Together is an international community platform where people can request help,
-offer support, and connect with others in real life.
-</p>
-<p>
-The platform enables individuals and communities to share needs,
-provide assistance, and build real human cooperation worldwide.
-</p>
+<p>Global human support platform connecting people in real life.</p>
 
 <div class="card">
-<h2>Community Support</h2>
-<p>Independent initiatives supporting cooperation and stability.</p>
+<b>Total Users:</b> <span id="userCount">0</span><br>
+<b>Total Posts:</b> <span id="postCount">0</span>
 </div>
 
 <div class="card">
-<h2>Live Activity</h2>
+<h2>Recent Activity</h2>
 <div id="homeFeed"></div>
 </div>
 </div>
 
-<div id="login" class="view hidden">
+<!-- LOGIN -->
+<div id="login" class="page hidden">
 <div class="card">
 <h2>Login</h2>
 <input id="email" placeholder="Email">
-<input id="pass" type="password" placeholder="Password">
-<button onclick="login()">Login</button>
-<button class="secondary" onclick="register()">Register</button>
-<p id="loginMsg"></p>
+<button onclick="login()">Enter</button>
 </div>
 </div>
 
-<div id="dashboard" class="view hidden">
-<div class="card" id="userBox"></div>
+<!-- DASHBOARD -->
+<div id="dashboard" class="page hidden">
+<div class="card" id="profile"></div>
 </div>
 
-<div id="help" class="view hidden">
+<!-- HELP -->
+<div id="help" class="page hidden">
 <div class="card">
 <h2>Request Help</h2>
-<input id="helpTitle" placeholder="Describe your request">
-<button onclick="postHelp()">Submit</button>
+<input id="helpText" placeholder="Describe your request">
+<button onclick="createPost('HELP')">Publish</button>
 </div>
 </div>
 
-<div id="offer" class="view hidden">
+<!-- OFFER -->
+<div id="offer" class="page hidden">
 <div class="card">
 <h2>Offer Help</h2>
-<input id="offerTitle" placeholder="Describe your offer">
-<button onclick="postOffer()">Submit</button>
+<input id="offerText" placeholder="Describe your offer">
+<button onclick="createPost('OFFER')">Publish</button>
 </div>
 </div>
 
-<div id="activity" class="view hidden">
+<!-- ACTIVITY -->
+<div id="activity" class="page hidden">
 <div class="card">
 <h2>Community Activity</h2>
-<div id="activityFeed"></div>
-<button onclick="loadMore()">Load more</button>
+
+<input id="search" placeholder="Search..." oninput="renderPosts()">
+
+<select id="filter" onchange="renderPosts()">
+<option value="ALL">All</option>
+<option value="HELP">Help Requests</option>
+<option value="OFFER">Help Offers</option>
+</select>
+
+<div id="feed"></div>
 </div>
 </div>
 
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const supabase = window.supabase.createClient(
-"https://hwpeegcsdgxgcybuosfv.supabase.co",
-"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
-);
 
-function show(id){
-document.querySelectorAll(".view").forEach(v=>v.classList.add("hidden"));
-document.getElementById(id).classList.remove("hidden");
+/* ---------- STORAGE ---------- */
+
+function users(){return JSON.parse(localStorage.getItem("users")||"{}")}
+function posts(){return JSON.parse(localStorage.getItem("posts")||"[]")}
+function saveUsers(v){localStorage.setItem("users",JSON.stringify(v))}
+function savePosts(v){localStorage.setItem("posts",JSON.stringify(v))}
+
+/* ---------- NAV ---------- */
+
+function view(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"))
+document.getElementById(id).classList.remove("hidden")
 }
 
-async function login(){
-const {error}=await supabase.auth.signInWithPassword({
-email:email.value,password:pass.value});
-if(error){loginMsg.innerText=error.message;return;}
-loadUser();
-show("dashboard");
+/* ---------- LOGIN ---------- */
+
+function login(){
+let u=email.value.trim()
+if(!u) return
+
+let db=users()
+if(!db[u]) db[u]={trust:0}
+saveUsers(db)
+
+localStorage.setItem("user",u)
+updateProfile()
+updateStats()
+view("dashboard")
 }
 
-async function register(){
-const {error}=await supabase.auth.signUp({
-email:email.value,password:pass.value});
-if(error){loginMsg.innerText=error.message;return;}
-loginMsg.innerText="Check email to confirm";
+/* ---------- PROFILE ---------- */
+
+function trustLabel(score){
+if(score>=10) return `<span class="badge trust-high">HIGH TRUST</span>`
+if(score>=5) return `<span class="badge trust-mid">TRUSTED</span>`
+return `<span class="badge trust-low">NEW</span>`
 }
 
-async function loadUser(){
-const {data:{user}}=await supabase.auth.getUser();
-if(!user) return;
-userBox.innerHTML=
-"<h2>Dashboard</h2>Email: "+user.email+
-"<br><br><button onclick='logout()'>Logout</button>";
+function updateProfile(){
+let u=localStorage.getItem("user")
+if(!u) return
+let db=users()
+
+profile.innerHTML=`
+<h2>Profile</h2>
+Email: ${u}<br>
+Reputation: ${db[u].trust} ${trustLabel(db[u].trust)}
+<br><br>
+<button onclick="increaseTrust()">Increase Trust</button>
+<button class="gray" onclick="logout()">Logout</button>
+`
 }
 
-async function logout(){
-await supabase.auth.signOut();
-location.reload();
+function increaseTrust(){
+let u=localStorage.getItem("user")
+let db=users()
+db[u].trust++
+saveUsers(db)
+updateProfile()
 }
 
-async function postHelp(){
-const {data:{user}}=await supabase.auth.getUser();
-if(!user){show("login");return;}
-await supabase.schema("humans").from("posts").insert({
-type:"help_request",
-title:helpTitle.value
-});
-alert("Posted");
+/* ---------- POSTS ---------- */
+
+function createPost(type){
+let u=localStorage.getItem("user")
+if(!u){view("login");return}
+
+let text = type==="HELP" ? helpText.value : offerText.value
+if(!text.trim()) return
+
+let list=posts()
+list.unshift({
+user:u,
+type,
+text,
+time:new Date().toLocaleString()
+})
+savePosts(list)
+
+let db=users()
+db[u].trust++
+saveUsers(db)
+
+renderPosts()
+updateProfile()
+updateStats()
+alert("Posted")
 }
 
-async function postOffer(){
-const {data:{user}}=await supabase.auth.getUser();
-if(!user){show("login");return;}
-await supabase.schema("humans").from("posts").insert({
-type:"help_offer",
-title:offerTitle.value
-});
-alert("Posted");
+/* ---------- RENDER ---------- */
+
+function renderPosts(){
+let list=posts()
+let q=search.value.toLowerCase()
+let f=filter.value
+
+feed.innerHTML=""
+homeFeed.innerHTML=""
+
+list.forEach(p=>{
+if(f!=="ALL" && p.type!==f) return
+if(q && !p.text.toLowerCase().includes(q)) return
+
+let trust=users()[p.user]?.trust||0
+
+let html=`
+<div class="feed-item">
+<b>${p.type}</b> — ${p.text}<br>
+<small>${p.time}</small><br>
+User: ${p.user} ${trustLabel(trust)}
+</div>`
+
+feed.innerHTML+=html
+homeFeed.innerHTML+=html
+})
 }
 
-let offset=0;
-async function loadFeed(target,limit=5){
-const {data}=await supabase.schema("humans").from("posts")
-.select("title,region")
-.order("created_at",{ascending:false})
-.range(offset,offset+limit-1);
+/* ---------- STATS ---------- */
 
-if(!data) return;
-
-data.forEach(p=>{
-const d=document.createElement("div");
-d.className="feed-item";
-d.innerHTML="<b>"+(p.region||"")+"</b> "+p.title;
-target.appendChild(d);
-});
-offset+=limit;
+function updateStats(){
+userCount.innerText=Object.keys(users()).length
+postCount.innerText=posts().length
 }
 
-function loadMore(){loadFeed(activityFeed)}
+/* ---------- LOGOUT ---------- */
 
-loadFeed(homeFeed,5);
-loadFeed(activityFeed,5);
-loadUser();
+function logout(){
+localStorage.removeItem("user")
+location.reload()
+}
+
+/* ---------- INIT ---------- */
+
+updateProfile()
+renderPosts()
+updateStats()
+
 </script>
-
 </body>
 </html>
