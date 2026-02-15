@@ -1,107 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>I need help | Humans Together</title>
-
-<style>
-body{
-  margin:0;
-  font-family:system-ui;
-  background:#0b0e11;
-  color:#e5e7eb;
-  display:flex;
-  justify-content:center;
-  padding:40px 20px;
-}
-.container{
-  max-width:600px;
-  width:100%;
-}
-input, textarea{
-  width:100%;
-  padding:14px;
-  margin:10px 0;
-  border-radius:10px;
-  border:none;
-  background:#111827;
-  color:white;
-}
-button{
-  width:100%;
-  padding:16px;
-  border:none;
-  border-radius:12px;
-  background:#10b981;
-  color:white;
-  cursor:pointer;
-}
-</style>
+<title>I need help</title>
 </head>
-
 <body>
-
-<div class="container">
 
 <h1>I need help</h1>
 
 <form onsubmit="createHelp(event)">
-
-<input name="title" placeholder="Short title" required>
-<input name="location" placeholder="City / Country" required>
-
-<textarea name="message"
-placeholder="Describe what you need..."
-required></textarea>
-
-<button type="submit">Publish request</button>
-
+<input name="title" placeholder="Title" required>
+<input name="location" placeholder="Location" required>
+<textarea name="message" required></textarea>
+<button>Publish</button>
 </form>
 
-</div>
-
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const supabase = window.supabase.createClient(
-"https://hwpeegcsdgxgcybuosfv.supabase.co",
-"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
-);
-
-async function createHelp(e){
-  e.preventDefault();
-
-  const { data:{ user } } = await supabase.auth.getUser();
-  if(!user){
-    alert("Please login first");
-    return;
-  }
-
-  const title = e.target.title.value;
-  const region = e.target.location.value;
-  const description = e.target.message.value;
-
-  const { error } = await supabase
-    .from("humans.posts")
-    .insert({
-      user_id:user.id,
-      type:"help_request",
-      title,
-      description,
-      region
-    });
-
-  if(error){
-    alert(error.message);
-    return;
-  }
-
-  alert("Help request published");
-  location.href="activity.html";
-}
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>
