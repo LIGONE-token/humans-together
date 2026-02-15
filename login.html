@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html>
 <body>
-<h2>Login / Register</h2>
+<div class="wrap">
 
+<h1>Login</h1>
+
+<div class="card">
 <input id="email" placeholder="Email"><br><br>
 <input id="pass" type="password" placeholder="Password"><br><br>
-
 <button onclick="login()">Login</button>
 <button onclick="register()">Register</button>
 <p id="msg"></p>
+</div>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
-
 <script>
 const supabase=window.supabaseClient;
 
@@ -20,7 +24,7 @@ async function login(){
 const {error}=await supabase.auth.signInWithPassword({
 email:email.value,password:pass.value});
 if(error){msg.innerText=error.message;return;}
-location.href="index.html";
+location.href="dashboard.html";
 }
 
 async function register(){
