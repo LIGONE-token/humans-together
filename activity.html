@@ -1,73 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Community Activity | Humans Together</title>
-
 <style>
-body{
-  background:#0b0e11;
-  color:#e5e7eb;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-  margin:0;
-  padding:20px;
-}
-
-h1{
-  margin-bottom:20px;
-}
-
-.post{
-  background:#111827;
-  padding:16px;
-  margin-bottom:12px;
-  border-radius:10px;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.post:hover{
-  background:#1f2937;
-}
-
-.title{
-  font-size:18px;
-  font-weight:700;
-}
-
-.meta{
-  margin-top:6px;
-  font-size:13px;
-  color:#9ca3af;
-}
-
-.status{
-  margin-top:8px;
-  font-size:12px;
-  font-weight:700;
-}
-
-.open{ color:#10b981 }
-.progress{ color:#f59e0b }
-.done{ color:#3b82f6 }
-
-#statusMsg{
-  margin-bottom:15px;
-  font-weight:600;
-}
+body{margin:0;background:#0b0e11;color:#e5e7eb;font-family:system-ui;padding:20px}
+.top{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+a.btn{display:inline-block;padding:10px 14px;border-radius:12px;background:#111827;color:#e5e7eb;text-decoration:none}
+a.btn.primary{background:#10b981;color:#fff;font-weight:800}
+#statusMsg{margin:10px 0 16px;font-weight:700;color:#9ca3af}
+.post{background:#111827;padding:16px;border-radius:14px;margin-bottom:12px;cursor:pointer}
+.post:hover{background:#1f2937}
+.title{font-size:18px;font-weight:800}
+.meta{margin-top:6px;font-size:13px;color:#9ca3af}
+.status{margin-top:8px;font-size:12px;font-weight:900}
+.open{color:#10b981} .progress{color:#f59e0b} .done{color:#3b82f6}
 </style>
 </head>
-
 <body>
 
-<h1>Community Activity</h1>
+<div class="top">
+  <a class="btn" href="index.html">Home</a>
+  <a class="btn primary" href="post-create.html">Create Post</a>
+  <a class="btn" href="login.html">Login</a>
+  <a class="btn" href="dashboard.html">Dashboard</a>
+</div>
 
-<div id="statusMsg">Loading posts...</div>
+<h1 style="margin:0 0 6px">Community Activity</h1>
+<div id="statusMsg">Loading…</div>
 <div id="feed"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 const supabase = window.supabase.createClient(
   "https://hwpeegcsdgxgcybuosfv.supabase.co",
@@ -81,54 +45,41 @@ function statusClass(s){
   if(s==="OPEN") return "open";
   if(s==="IN_PROGRESS") return "progress";
   if(s==="COMPLETED") return "done";
-  return "";
+  return "open";
 }
 
 async function loadPosts(){
-
-  statusMsg.textContent="Loading posts...";
-
+  statusMsg.textContent = "Loading posts…";
   const { data, error } = await supabase
-    .schema("humans")
-    .from("posts")
+    .schema("humans").from("posts")
     .select("*")
     .order("created_at",{ascending:false});
 
   if(error){
-    statusMsg.textContent="ERROR: " + error.message;
+    statusMsg.textContent = "ERROR: " + error.message;
     return;
   }
-
   if(!data || data.length===0){
-    statusMsg.textContent="No posts yet";
+    statusMsg.textContent = "No posts yet.";
     return;
   }
 
-  statusMsg.textContent="";
-
+  statusMsg.textContent = "";
   data.forEach(post=>{
-
     const div = document.createElement("div");
-    div.className="post";
-
-    div.innerHTML=`
+    div.className = "post";
+    div.innerHTML = `
       <div class="title">${post.title || ""}</div>
       <div>${post.description || ""}</div>
       <div class="meta">${post.region || ""}</div>
-      <div class="status ${statusClass(post.status)}">
-        ${post.status || "OPEN"}
-      </div>
+      <div class="status ${statusClass(post.status)}">${post.status || "OPEN"}</div>
     `;
-
-    div.onclick = () =>
-      location.href = "post-detail.html?id=" + post.id;
-
+    div.onclick = ()=> location.href = "post-detail.html?id=" + post.id;
     feed.appendChild(div);
   });
 }
 
 loadPosts();
 </script>
-
 </body>
 </html>
