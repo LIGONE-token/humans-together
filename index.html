@@ -3,72 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="google-site-verification" content="YRRh6jvBiPgsqxbRXpFUyRfganm4lP1V1yTXE7MvlhQ" />
+<meta name="google-site-verification" content="YRRh6jvBiPgsqxbRXpFUyRfganm4lP1V1yTXE7MvlhQ" />
 
 <title>Humans Together | Global Human Support Network</title>
 
 <meta name="description" content="Humans Together connects people worldwide to help each other. Find support, offer help, and build stronger communities everywhere.">
-<meta name="author" content="Humans Together">
 
-<!-- Open Graph -->
-<meta property="og:title" content="Humans Together">
-<meta property="og:description" content="Together we help. A global space where people support each other.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://ligone-token.github.io/humans-together/">
-<meta property="og:image" content="https://ligone-token.github.io/humans-together/og-image.jpg">
-
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Humans Together">
-<meta name="twitter:description" content="A global human support network">
-<meta name="twitter:image" content="https://ligone-token.github.io/humans-together/og-image.png">
-
-<!-- Canonical -->
 <link rel="canonical" href="https://ligone-token.github.io/humans-together/">
 
 <style>
+
+/* ---------- BASE ---------- */
+
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   background:#0b0e11;
   color:#e5e7eb;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
   text-align:center;
+  padding:18px 14px;
 }
 
 .container{
-  max-width:700px;
-  padding:40px 20px;
+  max-width:680px;
+  margin:auto;
 }
 
+/* ---------- HEADER ---------- */
+
 h1{
-  font-size:46px;
-  margin-bottom:10px;
+  font-size:32px;
+  margin:4px 0 4px 0;
 }
 
 .tagline{
   color:#10b981;
   font-weight:600;
-  margin-bottom:25px;
+  margin-bottom:12px;
 }
 
 p{
   color:#9ca3af;
-  margin-bottom:40px;
+  font-size:15px;
+  margin-bottom:18px;
 }
+
+/* ---------- BUTTONS ---------- */
 
 button{
   width:100%;
-  padding:16px;
-  margin:12px 0;
+  padding:12px;
+  margin:6px 0;
   border:none;
-  border-radius:12px;
+  border-radius:10px;
   background:#2563eb;
   color:white;
-  font-size:16px;
+  font-size:15px;
   cursor:pointer;
 }
 
@@ -76,29 +66,56 @@ button:hover{
   background:#1d4ed8;
 }
 
-footer{
-  margin-top:40px;
-  font-size:13px;
-  color:#6b7280;
+/* ---------- SUPPORT ---------- */
+
+.support{
+  margin-top:16px;
+  padding:14px;
+  background:#111827;
+  border-radius:12px;
+  font-size:14px;
 }
-  .activity{
-  margin-top:40px;
+
+.support h3{
+  margin:0 0 6px 0;
+  color:#10b981;
+  font-size:15px;
+}
+
+.support p{
+  margin:0 0 8px 0;
+  font-size:13px;
+}
+
+.support-btn{
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:8px;
+  background:#2563eb;
+  color:white;
+  text-decoration:none;
+  font-size:13px;
+}
+
+/* ---------- ACTIVITY ---------- */
+
+.activity{
+  margin-top:16px;
   text-align:left;
   background:#111827;
-  padding:20px;
-  border-radius:14px;
+  padding:14px;
+  border-radius:12px;
 }
 
 .activity h2{
-  margin-top:0;
-  margin-bottom:15px;
-  font-size:18px;
+  margin:0 0 8px 0;
+  font-size:16px;
 }
 
 .feed-item{
-  padding:10px;
+  padding:6px 0;
   border-bottom:1px solid #1f2933;
-  font-size:14px;
+  font-size:13px;
 }
 
 .feed-item:last-child{
@@ -109,40 +126,16 @@ footer{
   color:#10b981;
   font-size:12px;
 }
-.support{
-  margin-top:50px;
-  padding:25px;
-  background:#111827;
-  border-radius:14px;
-  text-align:center;
-}
 
-.support h3{
-  margin-top:0;
-  color:#10b981;
-}
+/* ---------- FOOTER ---------- */
 
-.support p{
-  color:#9ca3af;
-  margin-bottom:15px;
-}
-
-.support-btn{
-  display:inline-block;
-  padding:12px 20px;
-  border-radius:10px;
-  background:#2563eb;
-  color:white;
-  text-decoration:none;
-  font-size:14px;
-}
-
-.support-btn:hover{
-  background:#1d4ed8;
+footer{
+  margin-top:14px;
+  font-size:12px;
+  color:#6b7280;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -154,27 +147,18 @@ footer{
 
 <p>
 You are not alone.<br>
-This is a global space where people connect,<br>
-support each other and grow stronger together.
+Connect, support, and grow stronger together.
 </p>
 
 <button onclick="location.href='help.html'">I need help</button>
 <button onclick="location.href='offer.html'">I want to help</button>
-  <button onclick="location.href='activity.html'">
-Community Activity
-</button>
-  <div class="support">
+<button onclick="location.href='activity.html'">Community Activity</button>
+
+<div class="support">
   <h3>🌱 Community Support</h3>
-  <p>
-    Humans Together is supported by independent community initiatives that
-    believe in cooperation, fairness and long-term social stability.
-  </p>
-
-  <a href="ligone.html" class="support-btn">
-    Learn about LIGONE LIG1
-  </a>
+  <p>Independent initiatives supporting cooperation and fairness.</p>
+  <a href="ligone.html" class="support-btn">Learn about LIGONE LIG1</a>
 </div>
-
 
 <div class="activity">
   <h2>🌍 Live Community Activity</h2>
@@ -184,7 +168,9 @@ Community Activity
 <footer>A global human support network</footer>
 
 </div>
-<!-- Supabase Library -->
+
+<!-- ---------- SUPABASE ---------- -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -194,46 +180,36 @@ const supabase = window.supabase.createClient(
 );
 </script>
 
-
 <script>
 async function loadActivity(){
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("humans.posts")
     .select("*")
-    .order("created_at", { ascending:false })
+    .order("created_at",{ascending:false})
     .limit(5);
 
-  if(error){
-    console.error(error);
-    return;
-  }
-
   const feed = document.getElementById("feed");
-  feed.innerHTML = "";
+  feed.innerHTML="";
 
   data.forEach(post=>{
+    const div=document.createElement("div");
+    div.className="feed-item";
 
-    const div = document.createElement("div");
-    div.className = "feed-item";
-
-    const type =
-      post.type === "help_request"
+    const type = post.type==="help_request"
       ? "Help requested"
       : "Help offered";
 
-    div.innerHTML = `
-      <strong>${post.region || "Unknown location"}</strong><br>
-      ${post.title || ""}<br>
+    div.innerHTML=`
+      <strong>${post.region||"Unknown"}</strong><br>
+      ${post.title||""}<br>
       <span class="status">${type}</span>
     `;
 
     feed.appendChild(div);
-
   });
 
 }
-
 loadActivity();
 </script>
 
@@ -250,12 +226,9 @@ async function ensureUserProfile(){
     .single();
 
   if(!data){
-    await supabase.from("humans.users").insert({
-      id: user.id
-    });
+    await supabase.from("humans.users").insert({ id:user.id });
   }
 }
-
 ensureUserProfile();
 </script>
 
