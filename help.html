@@ -7,14 +7,16 @@
 
 <style>
 body{margin:0;font-family:system-ui;background:#f6f8fb}
-.wrap{max-width:760px;margin:auto;padding:30px 20px}
+.wrap{max-width:700px;margin:auto;padding:40px 20px}
 .card{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
-input,textarea{width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid #ddd}
+input{width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid #ddd}
 button{padding:12px 16px;border:0;border-radius:8px;background:#10b981;color:white;font-weight:700;cursor:pointer}
+#status{margin-top:15px;font-weight:700}
 </style>
 </head>
 
 <body>
+
 <div class="wrap">
 <div class="card">
 
@@ -26,33 +28,58 @@ button{padding:12px 16px;border:0;border-radius:8px;background:#10b981;color:whi
 <button type="submit">Submit</button>
 </form>
 
-<p id="status"></p>
+<div id="status">Page loaded</div>
 
 </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+const statusBox = document.getElementById("status");
+
+statusBox.textContent = "Supabase loading...";
+
 const supabase = window.supabase.createClient(
   "https://hwpeegcsdgxgcybuosfv.supabase.co",
   "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
 );
 
-document.getElementById("form").addEventListener("submit", async e=>{
-  e.preventDefault();
+statusBox.textContent = "Ready";
 
-  const status=document.getElementById("status");
-  status.textContent="Saving...";
+document.getElementById("form").addEventListener("submit", async (e)=>{
 
-  const { error } = await supabase
-    .from("humans.posts")
-    .insert({
-      type:"help_request",
-      title:document.getElementById("title").value,
-      region:document.getElementById("region").value
-    });
+e.preventDefault();
 
-  status.textContent = error ? error.message : "Saved ✔";
+statusBox.textContent = "Submitting...";
+
+try{
+
+const title = document.getElementById("title").value;
+const region = document.getElementById("region").value;
+
+statusBox.textContent = "Sending to database...";
+
+const { data, error } = await supabase
+.from("humans.posts")
+.insert({
+type:"help_request",
+title:title,
+region:region
+})
+.select();
+
+if(error){
+statusBox.textContent = "ERROR: " + error.message;
+return;
+}
+
+statusBox.textContent = "SUCCESS ✔ Saved";
+
+}catch(err){
+statusBox.textContent = "JS ERROR: " + err.message;
+}
+
 });
 </script>
 
