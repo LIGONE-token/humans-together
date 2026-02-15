@@ -204,6 +204,27 @@ activityData.forEach(item=>{
   feed.appendChild(div);
 });
 </script>
+<script>
+async function ensureUserProfile(){
+
+  const { data:{user} } = await supabase.auth.getUser();
+  if(!user) return;
+
+  const { data } = await supabase
+    .from("humans.users")
+    .select("id")
+    .eq("id", user.id)
+    .single();
+
+  if(!data){
+    await supabase.from("humans.users").insert({
+      id: user.id
+    });
+  }
+}
+
+ensureUserProfile();
+</script>
 
 </body>
 </html>
