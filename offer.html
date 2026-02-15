@@ -1,110 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>I want to help | Humans Together</title>
-
-<style>
-body{
-  margin:0;
-  font-family:system-ui;
-  background:#0b0e11;
-  color:#e5e7eb;
-  display:flex;
-  justify-content:center;
-  padding:40px 20px;
-}
-.container{
-  max-width:600px;
-  width:100%;
-}
-input, textarea{
-  width:100%;
-  padding:14px;
-  margin:10px 0;
-  border-radius:10px;
-  border:none;
-  background:#111827;
-  color:white;
-}
-button{
-  width:100%;
-  padding:16px;
-  border:none;
-  border-radius:12px;
-  background:#2563eb;
-  color:white;
-  cursor:pointer;
-}
-</style>
+<title>I want to help</title>
 </head>
-
 <body>
-
-<div class="container">
 
 <h1>I want to help</h1>
 
 <form onsubmit="createOffer(event)">
-
 <input name="title" placeholder="How can you help?" required>
-<input name="location" placeholder="City / Country" required>
-
-<textarea name="message"
-placeholder="Describe what you offer..."
-required></textarea>
-
-<button type="submit">Publish offer</button>
-
+<input name="location" placeholder="Location" required>
+<textarea name="message" required></textarea>
+<button>Publish</button>
 </form>
 
-</div>
-
-
-<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const supabase = window.supabase.createClient(
-"https://hwpeegcsdgxgcybuosfv.supabase.co",
-"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
-);
-
-
-async function createOffer(e){
-  e.preventDefault();
-
-  const { data:{ user } } = await supabase.auth.getUser();
-
-  if(!user){
-    alert("Please login first");
-    return;
-  }
-
-  const title = e.target.title.value;
-  const region = e.target.location.value;
-  const description = e.target.message.value;
-
-  const { error } = await supabase
-    .from("humans.posts")
-    .insert({
-      user_id:user.id,
-      type:"help_offer",   // WICHTIG → Angebot
-      title,
-      description,
-      region
-    });
-
-  if(error){
-    alert(error.message);
-    return;
-  }
-
-  alert("Help offer published");
-  location.href="activity.html";
-}
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>
