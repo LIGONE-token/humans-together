@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Chat</title>
+<style>
+body{font-family:system-ui;background:#0b0e11;color:white;padding:20px}
+#chat{margin-bottom:10px}
+input,button{padding:10px;margin:4px 0}
+</style>
+</head>
+<body>
+
+<h2>Conversation</h2>
+
+<div id="chat"></div>
+
+<form onsubmit="sendMessage(event)">
+<input id="msg" placeholder="Write message..." required>
+<input type="hidden" id="receiver">
+<button>Send</button>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+
+<script>
+const params=new URLSearchParams(location.search);
+const other=params.get("user");
+document.getElementById("receiver").value=other;
+loadMessages(other);
+</script>
+
+</body>
+</html>
