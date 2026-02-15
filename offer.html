@@ -8,31 +8,17 @@
 <style>
 body{
   margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  font-family:system-ui;
   background:#0b0e11;
   color:#e5e7eb;
   display:flex;
   justify-content:center;
   padding:40px 20px;
 }
-
 .container{
   max-width:600px;
   width:100%;
 }
-
-h1{
-  text-align:center;
-  margin-bottom:10px;
-}
-
-p{
-  text-align:center;
-  color:#9ca3af;
-  margin-bottom:30px;
-  line-height:1.5;
-}
-
 input, textarea{
   width:100%;
   padding:14px;
@@ -41,29 +27,14 @@ input, textarea{
   border:none;
   background:#111827;
   color:white;
-  font-size:15px;
 }
-
 button{
   width:100%;
   padding:16px;
-  margin-top:15px;
   border:none;
   border-radius:12px;
   background:#2563eb;
   color:white;
-  font-size:16px;
-  cursor:pointer;
-}
-
-button:hover{
-  background:#1d4ed8;
-}
-
-.back{
-  margin-top:20px;
-  text-align:center;
-  color:#9ca3af;
   cursor:pointer;
 }
 </style>
@@ -75,36 +46,65 @@ button:hover{
 
 <h1>I want to help</h1>
 
-<p>
-Tell us how you would like to support others.<br>
-Your offer may help someone anywhere in the world.
-</p>
+<form onsubmit="createOffer(event)">
 
-<form action="https://formspree.io/f/mzdarray" method="POST">
+<input name="title" placeholder="How can you help?" required>
+<input name="location" placeholder="City / Country" required>
 
-<input type="hidden" name="_redirect"
-value="https://ligone-token.github.io/humans-together/thank-you.html">
-<input type="hidden" name="type" value="help_offer">
-
-<input type="text" name="name"
-placeholder="Your name or nickname" required>
-
-<input type="text" name="location"
-placeholder="Country / City" required>
-
-<textarea name="offer" rows="6"
-placeholder="How can you help others? Skills, time, knowledge, resources..."
+<textarea name="message"
+placeholder="Describe what you offer..."
 required></textarea>
 
-<button type="submit">Offer help</button>
+<button type="submit">Publish offer</button>
 
 </form>
 
-<div class="back" onclick="location.href='index.html'">
-← Back to Humans Together
 </div>
 
-</div>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabase = window.supabase.createClient(
+"https://hwpeegcsdgxgcybuosfv.supabase.co",
+"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
+);
+
+
+async function createOffer(e){
+  e.preventDefault();
+
+  const { data:{ user } } = await supabase.auth.getUser();
+
+  if(!user){
+    alert("Please login first");
+    return;
+  }
+
+  const title = e.target.title.value;
+  const region = e.target.location.value;
+  const description = e.target.message.value;
+
+  const { error } = await supabase
+    .from("humans.posts")
+    .insert({
+      user_id:user.id,
+      type:"help_offer",   // WICHTIG → Angebot
+      title,
+      description,
+      region
+    });
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  alert("Help offer published");
+  location.href="activity.html";
+}
+</script>
 
 </body>
 </html>
