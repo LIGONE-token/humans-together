@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Request Help</title>
+<title>I need help</title>
 
 <style>
 body{margin:0;font-family:system-ui;background:#f6f8fb}
@@ -28,7 +28,7 @@ button{padding:12px 16px;border:0;border-radius:8px;background:#10b981;color:whi
 <button type="submit">Submit</button>
 </form>
 
-<div id="status">Page loaded</div>
+<div id="status">Ready</div>
 
 </div>
 </div>
@@ -36,50 +36,42 @@ button{padding:12px 16px;border:0;border-radius:8px;background:#10b981;color:whi
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const statusBox = document.getElementById("status");
-
-statusBox.textContent = "Supabase loading...";
-
 const supabase = window.supabase.createClient(
-  "https://hwpeegcsdgxgcybuosfv.supabase.co",
-  "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
+"https://hwpeegcsdgxgcybuosfv.supabase.co",
+"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
 );
 
-statusBox.textContent = "Ready";
+const statusBox = document.getElementById("status");
 
 document.getElementById("form").addEventListener("submit", async (e)=>{
-
 e.preventDefault();
 
-statusBox.textContent = "Submitting...";
+statusBox.textContent="Checking login...";
 
-try{
+const { data:{ user } } = await supabase.auth.getUser();
 
-const title = document.getElementById("title").value;
-const region = document.getElementById("region").value;
-
-statusBox.textContent = "Sending to database...";
-
-const { data, error } = await supabase
-.from("humans.posts")
-.insert({
-type:"help_request",
-title:title,
-region:region
-})
-.select();
-
-if(error){
-statusBox.textContent = "ERROR: " + error.message;
+if(!user){
+statusBox.textContent="ERROR: Login required";
 return;
 }
 
-statusBox.textContent = "SUCCESS ✔ Saved";
+statusBox.textContent="Saving...";
 
-}catch(err){
-statusBox.textContent = "JS ERROR: " + err.message;
+const { error } = await supabase
+.schema("humans")
+.from("posts")
+.insert({
+user_id:user.id,
+type:"help_request",
+title:document.getElementById("title").value,
+region:document.getElementById("region").value
+});
+
+if(error){
+statusBox.textContent="ERROR: "+error.message;
+}else{
+statusBox.textContent="SUCCESS ✔ Saved";
 }
-
 });
 </script>
 
