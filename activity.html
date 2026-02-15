@@ -98,53 +98,55 @@ h1{
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-/*
-   DEMO DATA
-   Später ersetzen wir das durch echte Daten
-*/
+const supabase = window.supabase.createClient(
+  "DEINE_PROJECT_URL",
+  "DEIN_ANON_KEY"
+);
 
-const data = [
-{
-type:"help",
-location:"Berlin, Germany",
-text:"Need help moving furniture this weekend",
-time:"2 hours ago"
-},
-{
-type:"offer",
-location:"Solothurn, Switzerland",
-text:"Offering free language tutoring online",
-time:"5 hours ago"
-},
-{
-type:"help",
-location:"Madrid, Spain",
-text:"Looking for emotional support group",
-time:"1 day ago"
+async function loadPosts(){
+
+  const { data, error } = await supabase
+    .from("humans.posts")
+    .select("*")
+    .order("created_at", { ascending:false });
+
+  if(error){
+    console.error(error);
+    return;
+  }
+
+  const feed = document.getElementById("feed");
+  feed.innerHTML = "";
+
+  data.forEach(post=>{
+
+    const div = document.createElement("div");
+    div.className = "item";
+
+    const typeLabel =
+    post.type === "help_request"
+    ? '<div class="type help">HELP REQUEST</div>'
+    : '<div class="type offer">HELP OFFER</div>';
+
+    div.innerHTML = `
+      ${typeLabel}
+      <div class="location">${post.region || ""}</div>
+      <div class="text">${post.title || ""}<br>${post.description || ""}</div>
+      <div class="time">${new Date(post.created_at).toLocaleString()}</div>
+    `;
+
+    feed.appendChild(div);
+
+  });
+
 }
-];
 
-const feed = document.getElementById("feed");
+loadPosts();
+</script>
 
-data.forEach(item=>{
-const div = document.createElement("div");
-div.className="item";
-
-const typeLabel =
-item.type === "help"
-? '<div class="type help">HELP REQUEST</div>'
-: '<div class="type offer">HELP OFFER</div>';
-
-div.innerHTML = `
-${typeLabel}
-<div class="location">${item.location}</div>
-<div class="text">${item.text}</div>
-<div class="time">${item.time}</div>
-`;
-
-feed.appendChild(div);
-});
 </script>
 
 </body>
