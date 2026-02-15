@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Post | Humans Together</title>
+<style>
+body{margin:0;background:#0b0e11;color:#e5e7eb;font-family:system-ui;padding:20px}
+.card{max-width:720px;margin:auto;background:#111827;border-radius:14px;padding:20px}
+input,textarea,select{width:100%;padding:14px;border:0;border-radius:12px;background:#0f172a;color:#e5e7eb;margin:10px 0}
+button{width:100%;padding:14px;border:0;border-radius:12px;background:#10b981;color:#fff;font-weight:900;cursor:pointer}
+#status{margin-top:12px;font-weight:800;color:#9ca3af}
+a{color:#10b981;text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1 style="margin:0 0 6px">Create Post</h1>
+  <div style="color:#9ca3af;margin-bottom:10px">You must be logged in to publish.</div>
+
+  <select id="type">
+    <option value="help_request">I need help</option>
+    <option value="help_offer">I want to help</option>
+  </select>
+
+  <input id="title" placeholder="Short title">
+  <textarea id="description" placeholder="Describe the situation"></textarea>
+  <input id="region" placeholder="City / Country">
+
+  <button onclick="save()">Publish</button>
+  <div id="status"></div>
+
+  <p style="margin-top:14px"><a href="activity.html">← Back to activity</a></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabase = window.supabase.createClient(
+  "https://hwpeegcsdgxgcybuosfv.supabase.co",
+  "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
+);
+
+const statusEl = document.getElementById("status");
+
+async function save(){
+  statusEl.textContent = "Checking login…";
+  const { data:{ user } } = await supabase.auth.getUser();
+  if(!user){
+    statusEl.textContent = "Login required → redirecting…";
+    location.href = "login.html";
+    return;
+  }
+
+  statusEl.textContent = "Saving…";
+
+  const payload = {
+    user_id: user.id,
+    type: document.getElementById("type").value,
+    title: document.getElementById("title").value,
+    description: document.getElementById("description").value,
+    region: document.getElementById("region").value,
+    status: "OPEN"
+  };
+
+  const { error } = await supabase
+    .schema("humans").from("posts")
+    .insert(payload);
+
+  if(error){
+    statusEl.textContent = "ERROR: " + error.message;
+    return;
+  }
+
+  statusEl.textContent = "Saved ✔ Redirecting…";
+  location.href = "activity.html";
+}
+</script>
+</body>
+</html>
