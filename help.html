@@ -3,35 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>I need help - Humans Together</title>
+<title>I need help | Humans Together</title>
 
 <style>
 body{
   margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  font-family:system-ui;
   background:#0b0e11;
   color:#e5e7eb;
   display:flex;
   justify-content:center;
   padding:40px 20px;
 }
-
 .container{
   max-width:600px;
   width:100%;
 }
-
-h1{
-  text-align:center;
-  margin-bottom:10px;
-}
-
-p{
-  text-align:center;
-  color:#9ca3af;
-  margin-bottom:30px;
-}
-
 input, textarea{
   width:100%;
   padding:14px;
@@ -40,29 +27,14 @@ input, textarea{
   border:none;
   background:#111827;
   color:white;
-  font-size:15px;
 }
-
 button{
   width:100%;
   padding:16px;
-  margin-top:15px;
   border:none;
   border-radius:12px;
   background:#10b981;
   color:white;
-  font-size:16px;
-  cursor:pointer;
-}
-
-button:hover{
-  background:#059669;
-}
-
-.back{
-  margin-top:20px;
-  text-align:center;
-  color:#9ca3af;
   cursor:pointer;
 }
 </style>
@@ -73,28 +45,63 @@ button:hover{
 <div class="container">
 
 <h1>I need help</h1>
-<p>Tell us what you need. People around the world may support you.</p>
 
-<form action="https://formspree.io/f/mzdarray" method="POST">
+<form onsubmit="createHelp(event)">
 
-  <input type="hidden" name="_redirect" value="https://ligone-token.github.io/humans-together/thank-you.html">
-<input type="hidden" name="type" value="help_request">
+<input name="title" placeholder="Short title" required>
+<input name="location" placeholder="City / Country" required>
 
-<input type="text" name="name" placeholder="Your name or nickname" required>
+<textarea name="message"
+placeholder="Describe what you need..."
+required></textarea>
 
-<input type="text" name="location" placeholder="Country / City" required>
-
-<textarea name="message" rows="6" placeholder="Describe what you need help with..." required></textarea>
-
-<button type="submit">Send request</button>
+<button type="submit">Publish request</button>
 
 </form>
 
-<div class="back" onclick="location.href='index.html'">
-← Back to Humans Together
 </div>
 
-</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabase = window.supabase.createClient(
+"https://hwpeegcsdgxgcybuosfv.supabase.co",
+"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
+);
+
+async function createHelp(e){
+  e.preventDefault();
+
+  const { data:{ user } } = await supabase.auth.getUser();
+  if(!user){
+    alert("Please login first");
+    return;
+  }
+
+  const title = e.target.title.value;
+  const region = e.target.location.value;
+  const description = e.target.message.value;
+
+  const { error } = await supabase
+    .from("humans.posts")
+    .insert({
+      user_id:user.id,
+      type:"help_request",
+      title,
+      description,
+      region
+    });
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  alert("Help request published");
+  location.href="activity.html";
+}
+</script>
 
 </body>
 </html>
