@@ -1,56 +1,123 @@
-/* ===============================
-HUMANS TOGETHER — FINAL UI SYSTEM
-Production ready
-=============================== */
+/* =========================================
+HUMANS TOGETHER — GLOBAL RESPONSIVE SYSTEM
+Einmal einsetzen. Fertig.
+========================================= */
 
 *,
 *::before,
 *::after{
 box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+/* ===== ROOT ===== */
+
+:root{
+--max-width:1200px;
+--radius:14px;
+--gap:24px;
+--bg:#f6f8fb;
+--card:#ffffff;
+--text:#111827;
+--muted:#6b7280;
+--border:#e5e7eb;
+--primary:#2563eb;
 }
 
 /* ===== BODY ===== */
 
 body{
-margin:0;
 font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-background:#f6f8fb;
-color:#111827;
+background:var(--bg);
+color:var(--text);
 line-height:1.5;
+
+min-height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
 }
 
-/* ===== CONTENT WIDTH ===== */
+/* ===== PAGE WRAPPER ===== */
 
+.page,
 .container,
 .wrapper,
 main,
 section,
 .content{
-max-width:760px;
+width:100%;
+max-width:var(--max-width);
+padding:clamp(16px,3vw,32px);
 margin:auto;
-padding:24px 16px;
+}
+
+/* ===== HEADER ===== */
+
+header{
+width:100%;
+background:white;
+border-bottom:1px solid var(--border);
+display:flex;
+justify-content:center;
+}
+
+header > *{
+width:100%;
+max-width:var(--max-width);
+padding:16px;
+}
+
+/* ===== NAV ===== */
+
+nav{
+width:100%;
+background:white;
+border-bottom:1px solid var(--border);
+display:flex;
+justify-content:center;
+}
+
+nav > *{
+width:100%;
+max-width:var(--max-width);
+padding:12px 16px;
+display:flex;
+flex-wrap:wrap;
+gap:18px;
+}
+
+nav a{
+text-decoration:none;
+color:var(--text);
+font-weight:500;
+}
+
+nav a:hover{
+color:var(--primary);
 }
 
 /* ===== TYPOGRAPHY ===== */
 
-h1{
-font-size:32px;
-margin:8px 0 6px;
-font-weight:700;
-}
-
-h2{
-font-size:22px;
-margin-top:0;
-}
-
-h3{
-margin-top:0;
-}
+h1{font-size:clamp(26px,4vw,36px);margin-bottom:10px;}
+h2{font-size:clamp(20px,3vw,26px);margin-bottom:8px;}
+h3{font-size:18px;margin-bottom:6px;}
 
 p{
-color:#4b5563;
-margin:8px 0 16px;
+color:var(--muted);
+margin-bottom:14px;
+}
+
+/* ===== GRID SYSTEM ===== */
+
+.grid,
+.dashboard,
+.admin-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:var(--gap);
+width:100%;
 }
 
 /* ===== CARDS ===== */
@@ -59,132 +126,7 @@ margin:8px 0 16px;
 .panel,
 .box,
 form{
-background:#ffffff;
-border-radius:14px;
-padding:20px;
-box-shadow:0 3px 12px rgba(0,0,0,0.06);
-margin-top:18px;
-}
-
-/* ===== BUTTONS ===== */
-
-button,
-.btn{
-display:block;
-width:100%;
-padding:14px;
-border:none;
-border-radius:10px;
-background:#2563eb;
-color:white;
-font-size:15px;
-font-weight:600;
-cursor:pointer;
-transition:0.15s ease;
-margin-top:10px;
-}
-
-button:hover,
-.btn:hover{
-background:#1d4ed8;
-}
-
-/* ===== FORM ===== */
-
-label{
-display:block;
-margin-top:16px;
-font-weight:600;
-font-size:14px;
-}
-
-input,
-textarea,
-select{
-width:100%;
-padding:12px;
-margin-top:6px;
-border-radius:8px;
-border:2px solid #d1d5db;
-background:#ffffff;
-color:#111827;
-font-size:15px;
-transition:0.15s ease;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-outline:none;
-border-color:#2563eb;
-box-shadow:0 0 0 3px rgba(37,99,235,0.15);
-}
-
-/* ===== LINKS ===== */
-
-a{
-color:#2563eb;
-text-decoration:none;
-font-weight:500;
-}
-
-a:hover{
-text-decoration:underline;
-}
-
-/* ===== FEED / LISTS ===== */
-
-.feed-item,
-.item{
-padding:12px 0;
-border-bottom:1px solid #e5e7eb;
-font-size:14px;
-}
-
-.feed-item:last-child,
-.item:last-child{
-border-bottom:none;
-}
-
-/* ===== STATUS ===== */
-
-.status{
-font-size:12px;
-color:#10b981;
-margin-top:4px;
-}
-
-/* ===== HEADER / NAV (falls vorhanden) ===== */
-
-header{
-background:#ffffff;
-border-bottom:1px solid #e5e7eb;
-padding:14px 18px;
-}
-
-nav a{
-margin-right:18px;
-color:#374151;
-font-size:14px;
-}
-
-/* ===== MOBILE ===== */
-
-@media (max-width:700px){
-
-.container,
-.wrapper,
-main{
-padding:20px 14px;
-}
-
-h1{
-font-size:26px;
-}
-
-button{
-padding:13px;
-font-size:14px;
-}
-
-}
+background:var(--card);
+border-radius:var(--radius);
+padding:clamp(16px,2vw,24px);
+box-shadow:0
