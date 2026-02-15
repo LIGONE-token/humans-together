@@ -1,109 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login | Humans Together</title>
-
-<style>
-body{
-background:#0b0e11;
-color:white;
-font-family:system-ui;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-margin:0;
-}
-
-.card{
-background:#111827;
-padding:30px;
-border-radius:12px;
-width:320px;
-text-align:center;
-}
-
-input{
-width:100%;
-padding:14px;
-margin:10px 0;
-border-radius:10px;
-border:none;
-background:#1f2937;
-color:white;
-}
-
-button{
-width:100%;
-padding:14px;
-border:none;
-border-radius:10px;
-background:#10b981;
-color:white;
-font-size:16px;
-cursor:pointer;
-}
-
-button:hover{
-background:#059669;
-}
-
-#status{
-margin-top:15px;
-font-weight:600;
-}
-</style>
-</head>
-
-<body>
-
-<div class="card">
+<body style="background:#0b0e11;color:white;font-family:system-ui;padding:30px">
 
 <h2>Login</h2>
 
-<input id="email" placeholder="Email address">
-<button onclick="login()">Send login link</button>
+<input id="email" placeholder="Email" style="padding:12px;width:260px">
+<button onclick="login()" style="padding:12px">Send login link</button>
 
-<div id="status"></div>
-
-</div>
-
+<p id="msg"></p>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 const supabase = window.supabase.createClient(
 "https://hwpeegcsdgxgcybuosfv.supabase.co",
 "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
 );
 
-const statusBox = document.getElementById("status");
-
 async function login(){
-
-const email = document.getElementById("email").value.trim();
-
-if(!email){
-statusBox.textContent="Enter email first";
-return;
-}
-
-statusBox.textContent="Sending login link...";
-
 const { error } = await supabase.auth.signInWithOtp({
-email: email,
-options:{
-emailRedirectTo: window.location.origin
-}
+email:email.value,
+options:{emailRedirectTo:location.origin}
 });
-
-if(error){
-statusBox.textContent="ERROR: " + error.message;
-}else{
-statusBox.textContent="Check your email for login link ✔";
-}
+msg.textContent = error ? error.message : "Check email";
 }
 </script>
 
