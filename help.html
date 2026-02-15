@@ -3,43 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Humans Together</title>
+<title>Request Help</title>
 
 <style>
-body{
-  margin:0;
-  font-family:system-ui, sans-serif;
-  background:#f6f8fb;
-}
-
-.page{
-  max-width:900px;
-  margin:auto;
-  padding:40px 20px;
-}
-
-.card{
-  background:white;
-  padding:20px;
-  border-radius:12px;
-  box-shadow:0 2px 10px rgba(0,0,0,0.05);
-}
+body{margin:0;font-family:system-ui;background:#f6f8fb}
+.wrap{max-width:760px;margin:auto;padding:30px 20px}
+.card{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+input,textarea{width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid #ddd}
+button{padding:12px 16px;border:0;border-radius:8px;background:#10b981;color:white;font-weight:700;cursor:pointer}
 </style>
 </head>
 
 <body>
-
-<div class="page">
-
-<h1>Help Request</h1>
-
+<div class="wrap">
 <div class="card">
-<input placeholder="Describe your situation" style="width:100%;padding:10px;margin-bottom:10px;">
-<input placeholder="Location" style="width:100%;padding:10px;margin-bottom:10px;">
-<button style="padding:12px 20px;">Submit</button>
-</div>
+
+<h2>I need help</h2>
+
+<form id="form">
+<input id="title" placeholder="Describe your situation" required>
+<input id="region" placeholder="Location" required>
+<button type="submit">Submit</button>
+</form>
+
+<p id="status"></p>
 
 </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabase = window.supabase.createClient(
+  "https://hwpeegcsdgxgcybuosfv.supabase.co",
+  "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
+);
+
+document.getElementById("form").addEventListener("submit", async e=>{
+  e.preventDefault();
+
+  const status=document.getElementById("status");
+  status.textContent="Saving...";
+
+  const { error } = await supabase
+    .from("humans.posts")
+    .insert({
+      type:"help_request",
+      title:document.getElementById("title").value,
+      region:document.getElementById("region").value
+    });
+
+  status.textContent = error ? error.message : "Saved ✔";
+});
+</script>
 
 </body>
 </html>
