@@ -3,82 +3,100 @@ const supabase = window.supabase.createClient(
 "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
 );
 
-async function loadActivity(){
-  const feed=document.getElementById("feed");
-  if(!feed) return;
+/* =========================
+USER AUTO CREATE
+========================= */
+async function ensureUser(){
 
-  const {data}=await supabase
-    .from("posts")
-    .select("*")
-    .order("created_at",{ascending:false});
+ const {data:{user}} = await supabase.auth.getUser();
+ if(!user) return null;
 
-  feed.innerHTML="";
+ const {data} = await supabase
+  .from("humans_users")
+  .select("id")
+  .eq("id", user.id)
+  .single();
 
-  data?.forEach(p=>{
-    const div=document.createElement("div");
-    div.style.padding="6px";
-    div.style.borderBottom="1px solid #333";
-    div.innerHTML=`<b>${p.region||"Unknown"}</b><br>${p.title||""}`;
-    feed.appendChild(div);
-  });
+ if(!data){
+   await supabase.from("humans_users").insert({ id:user.id });
+ }
+
+ return user;
 }
 
-async function createHelp(e){
-  e.preventDefault();
-  const {data:{user}}=await supabase.auth.getUser();
-  if(!user) return alert("Login first");
+/* =========================
+CREATE POST
+========================= */
+async function createPost(type,title,desc,region){
 
-  await supabase.from("posts").insert({
-    user_id:user.id,
-    type:"help_request",
-    title:e.target.title.value,
-    description:e.target.message.value,
-    region:e.target.location.value
-  });
+ const user = await ensureUser();
+ if(!user) return alert("Login required");
 
-  location.href="activity.html";
+ await supabase.from("humans_posts").insert({
+  user_id:user.id,
+  type,
+  title,
+  description:desc,
+  region
+ });
 }
 
-async function createOffer(e){
-  e.preventDefault();
-  const {data:{user}}=await supabase.auth.getUser();
-  if(!user) return alert("Login first");
+/* =========================
+LOAD POSTS
+========================= */
+async function loadPosts(){
 
-  await supabase.from("posts").insert({
-    user_id:user.id,
-    type:"help_offer",
-    title:e.target.title.value,
-    description:e.target.message.value,
-    region:e.target.location.value
-  });
+ const {data} = await supabase
+  .from("humans_posts")
+  .select("*")
+  .order("created_at",{ascending:false});
 
-  location.href="activity.html";
+ return data || [];
 }
 
-async function login(){
-  const email=document.getElementById("email").value;
-  await supabase.auth.signInWithOtp({email});
-  alert("Check your email login link");
+/* =========================
+RESPOND TO HELP
+========================= */
+async function respond(postId,message){
+
+ const user = await ensureUser();
+ if(!user) return;
+
+ await supabase.from("humans_responses").insert({
+  post_id:postId,
+  user_id:user.id,
+  message
+ });
 }
 
-async function logout(){
-  await supabase.auth.signOut();
-  location.reload();
+/* =========================
+PRIVATE MESSAGE
+========================= */
+async function sendMessage(to,message){
+
+ const user = await ensureUser();
+ if(!user) return;
+
+ await supabase.from("humans_messages").insert({
+  sender:user.id,
+  receiver:to,
+  message
+ });
 }
 
-async function showAuth(){
-  const el=document.getElementById("auth");
-  if(!el) return;
+/* =========================
+CONFIRM HELP
+========================= */
+async function confirmHelp(postId,helperId){
 
-  const {data:{user}}=await supabase.auth.getUser();
-  if(user){
-    el.innerHTML=`${user.email} <button onclick="logout()">Logout</button>`;
-  }else{
-    el.innerHTML=`<a href="login.html">Login</a>`;
-  }
+ const user = await ensureUser();
+
+ await supabase.from("humans_help_confirmations").insert({
+  post_id:postId,
+  helper_id:helperId,
+  requester_id:user.id,
+  confirmed:true
+ });
+
+ await supabase.rpc("increase_trust",{ uid:helperId });
 }
-
-document.addEventListener("DOMContentLoaded",()=>{
-  loadActivity();
-  showAuth();
-});
