@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Post</title>
+<style>
+body{background:#0b0e11;color:white;font-family:system-ui;padding:20px}
+button{padding:12px;margin-top:10px;border:0;border-radius:8px;background:#10b981;color:white;cursor:pointer}
+.card{background:#111827;padding:20px;border-radius:12px}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2 id="title"></h2>
+<p id="desc"></p>
+<p id="region"></p>
+<p>Status: <strong id="status"></strong></p>
+
+<button onclick="offerHelp()">I can help</button>
+<button onclick="completeHelp()">Mark completed</button>
+<button onclick="rate()">Give trust ⭐</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabase = window.supabase.createClient(
+"https://hwpeegcsdgxgcybuosfv.supabase.co",
+"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
+);
+
+const postId = new URLSearchParams(location.search).get("id");
+
+async function load(){
+
+const { data } = await supabase
+.schema("humans")
+.from("posts")
+.select("*")
+.eq("id", postId)
+.single();
+
+title.textContent=data.title;
+desc.textContent=data.description;
+region.textContent=data.region;
+status.textContent=data.status;
+}
+
+async function offerHelp(){
+
+const { data:{ user } } = await supabase.auth.getUser();
+if(!user) return alert("Login required");
+
+await supabase.schema("humans").from("post_participants")
+.insert({post_id:postId,user_id:user.id,role:"helper"});
+
+await supabase.schema("humans").from("posts")
+.update({status:"IN_PROGRESS"})
+.eq("id",postId);
+
+location.reload();
+}
+
+async function completeHelp(){
+
+await supabase.schema("humans").from("posts")
+.update({status:"COMPLETED"})
+.eq("id",postId);
+
+location.reload();
+}
+
+async function rate(){
+
+const stars = prompt("Rating 1-5");
+const { data:{ user } } = await supabase.auth.getUser();
+
+await supabase.schema("humans").from("trust_ratings")
+.insert({
+post_id:postId,
+from_user:user.id,
+rating:stars
+});
+
+alert("Trust saved");
+}
+
+load();
+</script>
+</body>
+</html>
