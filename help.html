@@ -1,17 +1,45 @@
 <!DOCTYPE html>
-<html>
-<body style="background:#0b0e11;color:white;font-family:system-ui;padding:20px">
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Humans Together</title>
 
-<h1>I need help</h1>
+<style>
+body{
+  margin:0;
+  font-family:system-ui, sans-serif;
+  background:#f6f8fb;
+}
 
-<form onsubmit="createHelp(event)">
-<input name="title" placeholder="Title" required><br>
-<input name="location" placeholder="Location" required><br>
-<textarea name="message" required></textarea><br>
-<button>Publish</button>
-</form>
+.page{
+  max-width:900px;
+  margin:auto;
+  padding:40px 20px;
+}
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js"></script>
+.card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<h1>Help Request</h1>
+
+<div class="card">
+<input placeholder="Describe your situation" style="width:100%;padding:10px;margin-bottom:10px;">
+<input placeholder="Location" style="width:100%;padding:10px;margin-bottom:10px;">
+<button style="padding:12px 20px;">Submit</button>
+</div>
+
+</div>
+
 </body>
 </html>
