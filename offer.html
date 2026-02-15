@@ -1,17 +1,60 @@
 <!DOCTYPE html>
-<html>
-<body style="background:#0b0e11;color:white;font-family:system-ui;padding:20px">
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offer Help</title>
 
-<h1>I want to help</h1>
+<style>
+body{margin:0;font-family:system-ui;background:#f6f8fb}
+.wrap{max-width:760px;margin:auto;padding:30px 20px}
+.card{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+input,textarea{width:100%;padding:12px;margin-bottom:12px;border-radius:8px;border:1px solid #ddd}
+button{padding:12px 16px;border:0;border-radius:8px;background:#2563eb;color:white;font-weight:700;cursor:pointer}
+</style>
+</head>
 
-<form onsubmit="createOffer(event)">
-<input name="title" placeholder="Offer title" required><br>
-<input name="location" placeholder="Location" required><br>
-<textarea name="message" required></textarea><br>
-<button>Publish</button>
+<body>
+<div class="wrap">
+<div class="card">
+
+<h2>I want to help</h2>
+
+<form id="form">
+<input id="title" placeholder="What help do you offer?" required>
+<input id="region" placeholder="Location" required>
+<button type="submit">Submit</button>
 </form>
 
+<p id="status"></p>
+
+</div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js"></script>
+<script>
+const supabase = window.supabase.createClient(
+  "https://hwpeegcsdgxgcybuosfv.supabase.co",
+  "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
+);
+
+document.getElementById("form").addEventListener("submit", async e=>{
+  e.preventDefault();
+
+  const status=document.getElementById("status");
+  status.textContent="Saving...";
+
+  const { error } = await supabase
+    .from("humans.posts")
+    .insert({
+      type:"help_offer",
+      title:document.getElementById("title").value,
+      region:document.getElementById("region").value
+    });
+
+  status.textContent = error ? error.message : "Saved ✔";
+});
+</script>
+
 </body>
 </html>
