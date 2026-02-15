@@ -1,253 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="google-site-verification"
-content="YRRh6jvBiPgsqxbRXpFUyRfganm4lP1V1yTXE7MvlhQ" />
+<meta name="google-site-verification" content="YRRh6jvBiPgsqxbRXpFUyRfganm4lP1V1yTXE7MvlhQ" />
 
 <title>Humans Together | Global Human Support Network</title>
-<meta name="description" content="Global community platform where people request help, offer support and build trust.">
-<meta name="robots" content="index, follow">
+
+<meta name="description"
+content="Humans Together connects people worldwide to help each other. Find support, offer help, and build stronger communities everywhere." />
+
+<link rel="canonical" href="https://ligone-token.github.io/humans-together/">
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Humans Together" />
+<meta property="og:description" content="Together we help. A global space where people support each other." />
+<meta property="og:url" content="https://ligone-token.github.io/humans-together/" />
+<meta property="og:image" content="https://ligone-token.github.io/humans-together/og-image.png" />
 
 <style>
-body{margin:0;font-family:system-ui;background:#f6f8fb;color:#111827}
-.wrap{max-width:760px;margin:40px auto;padding:20px}
-.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-top:20px}
-button{padding:12px;border:none;border-radius:10px;background:#2563eb;color:#fff;font-weight:600;cursor:pointer;margin-top:10px}
-button.gray{background:#e5e7eb;color:#111827}
-input,select{width:100%;padding:12px;margin-top:8px;border-radius:8px;border:1px solid #d1d5db}
-nav button{margin-right:10px}
-.hidden{display:none}
-.feed-item{padding:10px 0;border-bottom:1px solid #e5e7eb}
-.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700;margin-left:6px}
-.trust-low{background:#fee2e2;color:#991b1b}
-.trust-mid{background:#fef3c7;color:#92400e}
-.trust-high{background:#dcfce7;color:#166534}
+:root{
+--bg:#f6f8fb;
+--card:#ffffff;
+--text:#111827;
+--muted:#6b7280;
+--line:#e5e7eb;
+--green:#10b981;
+--blue:#2563eb;
+}
+body{margin:0;font-family:system-ui;background:var(--bg);color:var(--text);}
+.wrap{max-width:760px;margin:auto;padding:20px;}
+header{text-align:center;}
+.tagline{color:var(--green);font-weight:700;}
+.desc{color:var(--muted);margin-bottom:20px;}
+.actions{display:grid;gap:10px;margin:20px 0;}
+.btn{border:none;border-radius:12px;padding:14px;font-weight:700;cursor:pointer;}
+.btn-help{background:var(--green);color:white}
+.btn-offer{background:var(--blue);color:white}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:10px;}
+.feed-item{padding:10px 0;border-bottom:1px solid var(--line);}
+.badge{font-size:11px;font-weight:800;padding:4px 8px;border-radius:999px;border:1px solid var(--line);}
+.badge-help{background:#ecfdf5;color:#065f46;}
+.badge-offer{background:#eff6ff;color:#1e3a8a;}
 </style>
-
 </head>
-<body>
 
+<body>
 <div class="wrap">
 
-<nav>
-<button onclick="view('home')">Home</button>
-<button onclick="view('activity')">Activity</button>
-<button onclick="view('help')">Request Help</button>
-<button onclick="view('offer')">Offer Help</button>
-<button onclick="view('dashboard')">Dashboard</button>
-<button onclick="view('login')">Login</button>
-</nav>
-
-<!-- HOME -->
-<div id="home" class="page">
+<header>
 <h1>Humans Together</h1>
-<p>Global human support platform connecting people in real life.</p>
+<div class="tagline">Together we help</div>
+<p class="desc">
+You are not alone. A global space where people connect and support each other.
+</p>
+</header>
+
+<section class="actions">
+<button class="btn btn-help" onclick="location.href='help.html'">I need help</button>
+<button class="btn btn-offer" onclick="location.href='offer.html'">I want to help</button>
+<button class="btn" onclick="location.href='activity.html'">Community Activity</button>
+</section>
 
 <div class="card">
-<b>Total Users:</b> <span id="userCount">0</span><br>
-<b>Total Posts:</b> <span id="postCount">0</span>
+<h2>🌱 Community Support</h2>
+<p>
+Humans Together is supported by independent community initiatives that believe in cooperation,
+fairness and long-term social stability.
+</p>
+<a href="ligone.html" style="font-weight:800;color:#2563eb;text-decoration:none">
+Learn about LIGONE LIG1 →
+</a>
 </div>
 
 <div class="card">
-<h2>Recent Activity</h2>
-<div id="homeFeed"></div>
-</div>
-</div>
-
-<!-- LOGIN -->
-<div id="login" class="page hidden">
-<div class="card">
-<h2>Login</h2>
-<input id="email" placeholder="Email">
-<button onclick="login()">Enter</button>
-</div>
-</div>
-
-<!-- DASHBOARD -->
-<div id="dashboard" class="page hidden">
-<div class="card" id="profile"></div>
-</div>
-
-<!-- HELP -->
-<div id="help" class="page hidden">
-<div class="card">
-<h2>Request Help</h2>
-<input id="helpText" placeholder="Describe your request">
-<button onclick="createPost('HELP')">Publish</button>
-</div>
-</div>
-
-<!-- OFFER -->
-<div id="offer" class="page hidden">
-<div class="card">
-<h2>Offer Help</h2>
-<input id="offerText" placeholder="Describe your offer">
-<button onclick="createPost('OFFER')">Publish</button>
-</div>
-</div>
-
-<!-- ACTIVITY -->
-<div id="activity" class="page hidden">
-<div class="card">
-<h2>Community Activity</h2>
-
-<input id="search" placeholder="Search..." oninput="renderPosts()">
-
-<select id="filter" onchange="renderPosts()">
-<option value="ALL">All</option>
-<option value="HELP">Help Requests</option>
-<option value="OFFER">Help Offers</option>
-</select>
-
+<h2>🌍 Live Community Activity</h2>
 <div id="feed"></div>
 </div>
-</div>
+
+<div id="session"></div>
 
 </div>
+
+<!-- SUPABASE EINMAL LADEN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+const supabase = window.supabase.createClient(
+"https://hwpeegcsdgxgcybuosfv.supabase.co",
+"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
+);
 
-/* ---------- STORAGE ---------- */
+async function loadActivity(){
+const { data, error } = await supabase
+.schema("humans")
+.from("posts")
+.select("type,title,region,created_at")
+.order("created_at",{ascending:false})
+.limit(5);
 
-function users(){return JSON.parse(localStorage.getItem("users")||"{}")}
-function posts(){return JSON.parse(localStorage.getItem("posts")||"[]")}
-function saveUsers(v){localStorage.setItem("users",JSON.stringify(v))}
-function savePosts(v){localStorage.setItem("posts",JSON.stringify(v))}
+const feed=document.getElementById("feed");
+feed.innerHTML="";
 
-/* ---------- NAV ---------- */
+if(error){ feed.innerHTML="Activity unavailable"; return; }
+if(!data || data.length===0){ feed.innerHTML="No activity yet"; return; }
 
-function view(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"))
-document.getElementById(id).classList.remove("hidden")
+data.forEach(post=>{
+const badge = post.type==="help_request"
+? '<span class="badge badge-help">HELP REQUEST</span>'
+: '<span class="badge badge-offer">HELP OFFER</span>';
+
+const div=document.createElement("div");
+div.className="feed-item";
+div.innerHTML=`
+<strong>${post.region || ""}</strong><br>
+${post.title || ""}<br>
+${badge}`;
+feed.appendChild(div);
+});
 }
 
-/* ---------- LOGIN ---------- */
+async function showSession(){
+const { data:{ user } } = await supabase.auth.getUser();
+if(!user) return;
 
-function login(){
-let u=email.value.trim()
-if(!u) return
-
-let db=users()
-if(!db[u]) db[u]={trust:0}
-saveUsers(db)
-
-localStorage.setItem("user",u)
-updateProfile()
-updateStats()
-view("dashboard")
-}
-
-/* ---------- PROFILE ---------- */
-
-function trustLabel(score){
-if(score>=10) return `<span class="badge trust-high">HIGH TRUST</span>`
-if(score>=5) return `<span class="badge trust-mid">TRUSTED</span>`
-return `<span class="badge trust-low">NEW</span>`
-}
-
-function updateProfile(){
-let u=localStorage.getItem("user")
-if(!u) return
-let db=users()
-
-profile.innerHTML=`
-<h2>Profile</h2>
-Email: ${u}<br>
-Reputation: ${db[u].trust} ${trustLabel(db[u].trust)}
+const div=document.getElementById("session");
+div.style.textAlign="center";
+div.style.marginTop="20px";
+div.innerHTML=`
+Logged in as ${user.email}
 <br><br>
-<button onclick="increaseTrust()">Increase Trust</button>
-<button class="gray" onclick="logout()">Logout</button>
-`
+<button onclick="logout()">Logout</button>`;
 }
 
-function increaseTrust(){
-let u=localStorage.getItem("user")
-let db=users()
-db[u].trust++
-saveUsers(db)
-updateProfile()
+async function logout(){
+await supabase.auth.signOut();
+location.reload();
 }
 
-/* ---------- POSTS ---------- */
-
-function createPost(type){
-let u=localStorage.getItem("user")
-if(!u){view("login");return}
-
-let text = type==="HELP" ? helpText.value : offerText.value
-if(!text.trim()) return
-
-let list=posts()
-list.unshift({
-user:u,
-type,
-text,
-time:new Date().toLocaleString()
-})
-savePosts(list)
-
-let db=users()
-db[u].trust++
-saveUsers(db)
-
-renderPosts()
-updateProfile()
-updateStats()
-alert("Posted")
-}
-
-/* ---------- RENDER ---------- */
-
-function renderPosts(){
-let list=posts()
-let q=search.value.toLowerCase()
-let f=filter.value
-
-feed.innerHTML=""
-homeFeed.innerHTML=""
-
-list.forEach(p=>{
-if(f!=="ALL" && p.type!==f) return
-if(q && !p.text.toLowerCase().includes(q)) return
-
-let trust=users()[p.user]?.trust||0
-
-let html=`
-<div class="feed-item">
-<b>${p.type}</b> — ${p.text}<br>
-<small>${p.time}</small><br>
-User: ${p.user} ${trustLabel(trust)}
-</div>`
-
-feed.innerHTML+=html
-homeFeed.innerHTML+=html
-})
-}
-
-/* ---------- STATS ---------- */
-
-function updateStats(){
-userCount.innerText=Object.keys(users()).length
-postCount.innerText=posts().length
-}
-
-/* ---------- LOGOUT ---------- */
-
-function logout(){
-localStorage.removeItem("user")
-location.reload()
-}
-
-/* ---------- INIT ---------- */
-
-updateProfile()
-renderPosts()
-updateStats()
-
+loadActivity();
+showSession();
 </script>
+
 </body>
 </html>
