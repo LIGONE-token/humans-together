@@ -184,26 +184,59 @@ Community Activity
 <footer>A global human support network</footer>
 
 </div>
+<!-- Supabase Library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const activityData = [
-  {location:"Berlin, Germany", text:"Help requested for moving furniture", status:"open"},
-  {location:"Solothurn, Switzerland", text:"Food support offered", status:"available"},
-  {location:"Barcelona, Spain", text:"Local community group created", status:"active"}
-];
-
-const feed = document.getElementById("feed");
-
-activityData.forEach(item=>{
-  const div = document.createElement("div");
-  div.className="feed-item";
-  div.innerHTML = `
-    <strong>${item.location}</strong><br>
-    ${item.text}<br>
-    <span class="status">${item.status}</span>
-  `;
-  feed.appendChild(div);
-});
+const supabase = window.supabase.createClient(
+  "https://hwpeegcsdgxgcybuosfv.supabase.co",
+  "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
+);
 </script>
+
+
+<script>
+async function loadActivity(){
+
+  const { data, error } = await supabase
+    .from("humans.posts")
+    .select("*")
+    .order("created_at", { ascending:false })
+    .limit(5);
+
+  if(error){
+    console.error(error);
+    return;
+  }
+
+  const feed = document.getElementById("feed");
+  feed.innerHTML = "";
+
+  data.forEach(post=>{
+
+    const div = document.createElement("div");
+    div.className = "feed-item";
+
+    const type =
+      post.type === "help_request"
+      ? "Help requested"
+      : "Help offered";
+
+    div.innerHTML = `
+      <strong>${post.region || "Unknown location"}</strong><br>
+      ${post.title || ""}<br>
+      <span class="status">${type}</span>
+    `;
+
+    feed.appendChild(div);
+
+  });
+
+}
+
+loadActivity();
+</script>
+
 <script>
 async function ensureUserProfile(){
 
