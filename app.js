@@ -112,3 +112,63 @@ document.addEventListener("DOMContentLoaded",()=>{
   ensureUser();
   showAuth();
 });
+// ===============================
+// SEND MESSAGE
+// ===============================
+
+async function sendMessage(e){
+  e.preventDefault();
+
+  const { data:{user} } = await supabase.auth.getUser();
+  if(!user) return alert("Login required");
+
+  const receiver = document.getElementById("receiver").value;
+  const text = document.getElementById("msg").value;
+
+  const { error } = await supabase.from("messages").insert({
+    sender:user.id,
+    receiver,
+    text
+  });
+
+  if(error) return alert(error.message);
+
+  document.getElementById("msg").value="";
+  loadMessages(receiver);
+}
+
+
+// ===============================
+// LOAD CHAT
+// ===============================
+
+async function loadMessages(otherUser){
+
+  const chat=document.getElementById("chat");
+  if(!chat) return;
+
+  const { data:{user} } = await supabase.auth.getUser();
+  if(!user) return;
+
+  const { data } = await supabase
+    .from("messages")
+    .select("*")
+    .or(`sender.eq.${user.id},receiver.eq.${user.id}`)
+    .order("created_at",{ascending:true});
+
+  chat.innerHTML="";
+
+  data?.forEach(m=>{
+    if(
+      (m.sender===user.id && m.receiver===otherUser) ||
+      (m.receiver===user.id && m.sender===otherUser)
+    ){
+      const div=document.createElement("div");
+      div.style.margin="5px 0";
+      div.style.padding="6px";
+      div.style.background=m.sender===user.id?"#1d4ed8":"#111827";
+      div.innerText=m.text;
+      chat.appendChild(div);
+    }
+  });
+}
