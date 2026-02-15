@@ -23,10 +23,14 @@ async function loadActivity(){
     const type=p.type==="help_request"?"Help requested":"Help offered";
 
     div.innerHTML=`
-      <strong>${p.region||"Unknown"}</strong><br>
-      ${p.title||""}<br>
-      <span class="status">${type}</span>
-    `;
+  <strong>${p.region||"Unknown"}</strong><br>
+  ${p.title||""}<br>
+  <span class="status">${type}</span><br>
+  <button onclick="location.href='chat.html?user=${p.user_id}'">
+    Contact
+  </button>
+`;
+
     feed.appendChild(div);
   });
 }
