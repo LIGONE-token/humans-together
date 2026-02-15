@@ -3,20 +3,14 @@ const supabase = window.supabase.createClient(
 "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
 );
 
-// ================= FEED =================
 async function loadActivity(){
   const feed=document.getElementById("feed");
   if(!feed) return;
 
-  const { data, error } = await supabase
+  const {data}=await supabase
     .from("posts")
     .select("*")
     .order("created_at",{ascending:false});
-
-  if(error){
-    console.error(error);
-    return;
-  }
 
   feed.innerHTML="";
 
@@ -24,22 +18,14 @@ async function loadActivity(){
     const div=document.createElement("div");
     div.style.padding="6px";
     div.style.borderBottom="1px solid #333";
-
-    div.innerHTML=`
-      <b>${p.region||"Unknown"}</b><br>
-      ${p.title||""}
-    `;
-
+    div.innerHTML=`<b>${p.region||"Unknown"}</b><br>${p.title||""}`;
     feed.appendChild(div);
   });
 }
 
-
-// ================= HELP =================
 async function createHelp(e){
   e.preventDefault();
-
-  const { data:{user} } = await supabase.auth.getUser();
+  const {data:{user}}=await supabase.auth.getUser();
   if(!user) return alert("Login first");
 
   await supabase.from("posts").insert({
@@ -53,12 +39,9 @@ async function createHelp(e){
   location.href="activity.html";
 }
 
-
-// ================= OFFER =================
 async function createOffer(e){
   e.preventDefault();
-
-  const { data:{user} } = await supabase.auth.getUser();
+  const {data:{user}}=await supabase.auth.getUser();
   if(!user) return alert("Login first");
 
   await supabase.from("posts").insert({
@@ -72,12 +55,10 @@ async function createOffer(e){
   location.href="activity.html";
 }
 
-
-// ================= LOGIN =================
 async function login(){
   const email=document.getElementById("email").value;
   await supabase.auth.signInWithOtp({email});
-  alert("Check email login link");
+  alert("Check your email login link");
 }
 
 async function logout(){
@@ -85,14 +66,11 @@ async function logout(){
   location.reload();
 }
 
-
-// ================= STATUS =================
 async function showAuth(){
   const el=document.getElementById("auth");
   if(!el) return;
 
-  const { data:{user} } = await supabase.auth.getUser();
-
+  const {data:{user}}=await supabase.auth.getUser();
   if(user){
     el.innerHTML=`${user.email} <button onclick="logout()">Logout</button>`;
   }else{
