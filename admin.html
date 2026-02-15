@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin | Humans Together</title>
+<style>
+body{margin:0;background:#0b0e11;color:#e5e7eb;font-family:system-ui;padding:20px}
+a.btn{display:inline-block;padding:10px 14px;border-radius:12px;background:#111827;color:#e5e7eb;text-decoration:none;margin-right:8px}
+.card{max-width:900px;margin:auto;background:#111827;border-radius:14px;padding:20px}
+.item{padding:12px;border-radius:12px;background:#0f172a;margin:10px 0}
+#status{margin-top:10px;font-weight:800;color:#9ca3af}
+</style>
+</head>
+<body>
+
+<div style="margin-bottom:14px">
+  <a class="btn" href="index.html">Home</a>
+  <a class="btn" href="activity.html">Activity</a>
+  <a class="btn" href="logout.html">Logout</a>
+</div>
+
+<div class="card">
+  <h1 style="margin:0 0 6px">Admin Dashboard</h1>
+  <div id="status">Checking admin…</div>
+  <div id="list"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const ADMIN_EMAIL = "YOUR_ADMIN_EMAIL_HERE";
+
+const supabase = window.supabase.createClient(
+  "https://hwpeegcsdgxgcybuosfv.supabase.co",
+  "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
+);
+
+const statusEl = document.getElementById("status");
+const list = document.getElementById("list");
+
+async function load(){
+  const { data:{ user } } = await supabase.auth.getUser();
+  if(!user){ location.href="login.html"; return; }
+
+  if((user.email||"").toLowerCase() !== ADMIN_EMAIL.toLowerCase()){
+    statusEl.textContent = "Access denied (not admin).";
+    return;
+  }
+
+  statusEl.textContent = "Loading posts…";
+
+  const { data, error } = await supabase.schema("humans").from("posts")
+    .select("id,type,title,region,status,created_at")
+    .order("created_at",{ascending:false})
+    .limit(200);
+
+  if(error){ statusEl.textContent="ERROR: "+error.message; return; }
+  statusEl.textContent="";
+
+  (data||[]).forEach(p=>{
+    const div=document.createElement("div");
+    div.className="item";
+    div.innerHTML = `<strong>${p.title||""}</strong>
+      <div style="color:#9ca3af;font-size:13px">${p.type} • ${p.region||""} • ${p.status||""}</div>`;
+    list.appendChild(div);
+  });
+}
+load();
+</script>
+</body>
+</html>
