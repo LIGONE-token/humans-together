@@ -1,236 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="google-site-verification" content="YRRh6jvBiPgsqxbRXpFUyRfganm4lP1V1yTXE7MvlhQ" />
-
-<title>Humans Together | Global Human Support Network</title>
-
-<meta name="description" content="Humans Together connects people worldwide to help each other. Find support, offer help, and build stronger communities everywhere.">
-
-<link rel="canonical" href="https://ligone-token.github.io/humans-together/">
-
+<title>Humans Together</title>
 <style>
-
-/* ---------- BASE ---------- */
-
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-  background:#0b0e11;
-  color:#e5e7eb;
-  text-align:center;
-  padding:18px 14px;
-}
-
-.container{
-  max-width:680px;
-  margin:auto;
-}
-
-/* ---------- HEADER ---------- */
-
-h1{
-  font-size:32px;
-  margin:4px 0 4px 0;
-}
-
-.tagline{
-  color:#10b981;
-  font-weight:600;
-  margin-bottom:12px;
-}
-
-p{
-  color:#9ca3af;
-  font-size:15px;
-  margin-bottom:18px;
-}
-
-/* ---------- BUTTONS ---------- */
-
-button{
-  width:100%;
-  padding:12px;
-  margin:6px 0;
-  border:none;
-  border-radius:10px;
-  background:#2563eb;
-  color:white;
-  font-size:15px;
-  cursor:pointer;
-}
-
-button:hover{
-  background:#1d4ed8;
-}
-
-/* ---------- SUPPORT ---------- */
-
-.support{
-  margin-top:16px;
-  padding:14px;
-  background:#111827;
-  border-radius:12px;
-  font-size:14px;
-}
-
-.support h3{
-  margin:0 0 6px 0;
-  color:#10b981;
-  font-size:15px;
-}
-
-.support p{
-  margin:0 0 8px 0;
-  font-size:13px;
-}
-
-.support-btn{
-  display:inline-block;
-  padding:8px 14px;
-  border-radius:8px;
-  background:#2563eb;
-  color:white;
-  text-decoration:none;
-  font-size:13px;
-}
-
-/* ---------- ACTIVITY ---------- */
-
-.activity{
-  margin-top:16px;
-  text-align:left;
-  background:#111827;
-  padding:14px;
-  border-radius:12px;
-}
-
-.activity h2{
-  margin:0 0 8px 0;
-  font-size:16px;
-}
-
-.feed-item{
-  padding:6px 0;
-  border-bottom:1px solid #1f2933;
-  font-size:13px;
-}
-
-.feed-item:last-child{
-  border-bottom:none;
-}
-
-.status{
-  color:#10b981;
-  font-size:12px;
-}
-
-/* ---------- FOOTER ---------- */
-
-footer{
-  margin-top:14px;
-  font-size:12px;
-  color:#6b7280;
-}
-
+body{font-family:system-ui;background:#0b0e11;color:white;text-align:center;padding:20px}
+button{width:100%;padding:12px;margin:6px 0}
+.feed-item{padding:6px;border-bottom:1px solid #333}
+.status{color:#10b981;font-size:12px}
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<div id="auth"></div>
 
 <h1>Humans Together</h1>
-<div class="tagline">Together we help</div>
-
-<p>
-You are not alone.<br>
-Connect, support, and grow stronger together.
-</p>
 
 <button onclick="location.href='help.html'">I need help</button>
 <button onclick="location.href='offer.html'">I want to help</button>
 <button onclick="location.href='activity.html'">Community Activity</button>
 
-<div class="support">
-  <h3>🌱 Community Support</h3>
-  <p>Independent initiatives supporting cooperation and fairness.</p>
-  <a href="ligone.html" class="support-btn">Learn about LIGONE LIG1</a>
-</div>
-
-<div class="activity">
-  <h2>🌍 Live Community Activity</h2>
-  <div id="feed"></div>
-</div>
-
-<footer>A global human support network</footer>
-
-</div>
-
-<!-- ---------- SUPABASE ---------- -->
+<h3>Live Activity</h3>
+<div id="feed"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const supabase = window.supabase.createClient(
-  "https://hwpeegcsdgxgcybuosfv.supabase.co",
-  "sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
-);
-</script>
-
-<script>
-async function loadActivity(){
-
-  const { data } = await supabase
-    .from("humans.posts")
-    .select("*")
-    .order("created_at",{ascending:false})
-    .limit(5);
-
-  const feed = document.getElementById("feed");
-  feed.innerHTML="";
-
-  data.forEach(post=>{
-    const div=document.createElement("div");
-    div.className="feed-item";
-
-    const type = post.type==="help_request"
-      ? "Help requested"
-      : "Help offered";
-
-    div.innerHTML=`
-      <strong>${post.region||"Unknown"}</strong><br>
-      ${post.title||""}<br>
-      <span class="status">${type}</span>
-    `;
-
-    feed.appendChild(div);
-  });
-
-}
-loadActivity();
-</script>
-
-<script>
-async function ensureUserProfile(){
-
-  const { data:{user} } = await supabase.auth.getUser();
-  if(!user) return;
-
-  const { data } = await supabase
-    .from("humans.users")
-    .select("id")
-    .eq("id", user.id)
-    .single();
-
-  if(!data){
-    await supabase.from("humans.users").insert({ id:user.id });
-  }
-}
-ensureUserProfile();
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>
