@@ -255,10 +255,10 @@ async function post(type, text){
     const { data, error } = await sb
       .from("posts")
       .insert({
-        type: type,
-        text: text,
         user_id: currentUser.id,
-        user_email: currentUser.email
+        type: type,
+        description: text,   // <-- dein Inhalt gehört hier rein
+        text: text           // optional zusätzlich
       })
       .select()
 
@@ -268,23 +268,17 @@ async function post(type, text){
       return
     }
 
-    // Trust erhöhen (optional)
     await sb.rpc("increment_trust",{
       uid: currentUser.id,
       mail: currentUser.email
     }).catch(()=>{})
 
-    // Eingabefeld leeren
     if(type === "HELP") document.getElementById("helpText").value = ""
     if(type === "OFFER") document.getElementById("offerText").value = ""
 
-    // Erfolgsmeldung
     alert("Post published successfully")
 
-    // Feed neu laden
     await renderAll()
-
-    // Activity anzeigen
     view("activity")
 
   }catch(err){
@@ -292,6 +286,7 @@ async function post(type, text){
     console.error(err)
   }
 }
+
 
 
 // ---------- RENDER ----------
