@@ -238,23 +238,60 @@ return `<span class="badge trust-low">NEW</span>`
 
 // ---------- POST ----------
 
-async function post(type,text){
-if(!currentUser){ view("login"); return }
-if(!text.trim()) return
+async function post(type, text){
 
-await sb.from("posts").insert({
-type,
-text,
-user_id: currentUser.id,
-user_email: currentUser.email
-})
+  if(!currentUser){
+    view("login")
+    return
+  }
 
-await sb.rpc("increment_trust",{
-uid: currentUser.id,
-mail: currentUser.email
-}).catch(()=>{})
+  if(!text.trim()){
+    alert("Please enter a message")
+    return
+  }
 
-renderAll()
+  try{
+
+    // speichern
+    const { data, error } = await sb
+      .from("posts")
+      .insert({
+        type,
+        text,
+        user_id: currentUser.id,
+        user_email: currentUser.email
+      })
+      .select()
+
+    if(error){
+      alert("Post failed: " + error.message)
+      console.error(error)
+      return
+    }
+
+    // trust erhöhen (optional)
+    await sb.rpc("increment_trust",{
+      uid: currentUser.id,
+      mail: currentUser.email
+    }).catch(()=>{})
+
+    // Eingabefeld leeren
+    if(type === "HELP") document.getElementById("helpText").value = ""
+    if(type === "OFFER") document.getElementById("offerText").value = ""
+
+    // Erfolgsmeldung
+    alert("Your post was published successfully")
+
+    // neu rendern
+    await renderAll()
+
+    // optional zurück zur Activity Ansicht
+    view("activity")
+
+  }catch(err){
+    alert("Unexpected error")
+    console.error(err)
+  }
 }
 
 // ---------- RENDER ----------
