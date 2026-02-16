@@ -163,6 +163,15 @@ You are not alone. A global space where people connect and support each other.
 
 <script>
 
+  const homeFeed = document.getElementById("homeFeed")
+const activityFeed = document.getElementById("activityFeed")
+const myPosts = document.getElementById("myPosts")
+const session = document.getElementById("session")
+const stats = document.getElementById("stats")
+const profileBox = document.getElementById("profileBox")
+const email = document.getElementById("email")
+
+
 function view(id){
 ["home","login","help","offer","activity","dashboard","profile"]
 .forEach(v=>document.getElementById(v).classList.add("hidden"))
