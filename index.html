@@ -8,23 +8,31 @@
 <meta name="google-site-verification" content="YRRh6jvBiPgsqxbRXpFUyRfganm4lP1V1yTXE7MvlhQ" />
 
 <title>Humans Together | Global Human Support Network</title>
-<meta name="description" content="Humans Together connects people worldwide to request help, offer support, and build trusted human connections." />
-<meta name="robots" content="index,follow" />
+<meta name="description" content="Humans Together connects people worldwide to request help, offer support, and build trusted human connections. Community activity and global cooperation." />
+<meta name="robots" content="index,follow,max-image-preview:large" />
 <link rel="canonical" href="https://ligone-token.github.io/humans-together/" />
 
-<meta property="og:type" content="website" />
-<meta property="og:title" content="Humans Together" />
-<meta property="og:description" content="Global human support network." />
-<meta property="og:image" content="https://ligone-token.github.io/humans-together/og-image.png" />
+<meta property="og:type" content="website">
+<meta property="og:title" content="Humans Together">
+<meta property="og:description" content="Global human support network">
+<meta property="og:image" content="https://ligone-token.github.io/humans-together/og-image.png">
+<meta property="og:url" content="https://ligone-token.github.io/humans-together/">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Humans Together">
+<meta name="twitter:description" content="Global human support network">
+<meta name="twitter:image" content="https://ligone-token.github.io/humans-together/og-image.png">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 
 <style>
-body{margin:0;font-family:system-ui;background:#f6f8fb}
+body{margin:0;font-family:system-ui;background:#f6f8fb;color:#111827}
 .wrap{max-width:760px;margin:auto;padding:20px}
-.card{background:white;border:1px solid #e5e7eb;border-radius:12px;padding:12px;margin-top:12px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-top:12px}
+button{margin:4px;padding:8px 12px;border-radius:8px;border:none;background:#10b981;color:#fff;cursor:pointer}
 .hidden{display:none}
+.feed-item{border-bottom:1px solid #e5e7eb;padding:8px 0}
 </style>
 
 </head>
@@ -38,71 +46,88 @@ body{margin:0;font-family:system-ui;background:#f6f8fb}
 <button onclick="view('help')">Need help</button>
 <button onclick="view('offer')">Offer help</button>
 
-<div id="login" class="hidden">
-<input id="email" placeholder="Email">
+<div id="login" class="card hidden">
+<input id="email" placeholder="Email" style="width:100%;padding:8px">
 <button onclick="login()">Login</button>
 </div>
 
-<div id="help" class="hidden">
-<input id="helpText">
+<div id="help" class="card hidden">
+<input id="helpText" style="width:100%;padding:8px">
 <button onclick="post('HELP',helpText.value)">Send</button>
 </div>
 
-<div id="offer" class="hidden">
-<input id="offerText">
+<div id="offer" class="card hidden">
+<input id="offerText" style="width:100%;padding:8px">
 <button onclick="post('OFFER',offerText.value)">Send</button>
 </div>
 
 <div class="card">
-<h3>Community</h3>
+<h3>Community Activity</h3>
 <div id="feed"></div>
 </div>
 
 </div>
 
 <script>
+(function(){
 
-const feed=document.getElementById("feed")
-const email=document.getElementById("email")
-const helpText=document.getElementById("helpText")
-const offerText=document.getElementById("offerText")
-
-function view(id){
-["login","help","offer"].forEach(v=>document.getElementById(v).classList.add("hidden"))
-document.getElementById(id).classList.remove("hidden")
+if(!window.sb){
+console.error("Supabase not connected");
+return;
 }
 
-let user=null
+const feed=document.getElementById("feed");
+const email=document.getElementById("email");
+const help=document.getElementById("helpText");
+const offer=document.getElementById("offerText");
 
-async function init(){
-const {data}=await sb.auth.getUser()
-user=data?.user||null
-render()
-}
-sb.auth.onAuthStateChange((_e,s)=>{user=s?.user||null;render()})
+window.view=id=>{
+["login","help","offer"].forEach(v=>{
+const el=document.getElementById(v);
+if(el) el.classList.add("hidden");
+});
+const show=document.getElementById(id);
+if(show) show.classList.remove("hidden");
+};
 
-async function login(){
-await sb.auth.signInWithOtp({email:email.value,options:{emailRedirectTo:location.href}})
-alert("Check email")
-}
+let user=null;
 
-async function post(type,text){
-if(!user)return view("login")
-await sb.from("posts").insert({type,text,user_id:user.id,user_email:user.email})
-await sb.rpc("increment_trust",{uid:user.id,mail:user.email}).catch(()=>{})
-render()
+async function loadUser(){
+const {data}=await sb.auth.getUser();
+user=data?.user||null;
+render();
 }
+sb.auth.onAuthStateChange((_e,s)=>{user=s?.user||null;render();});
+
+window.login=async ()=>{
+if(!email.value) return;
+await sb.auth.signInWithOtp({email:email.value,options:{emailRedirectTo:location.href}});
+alert("Check email");
+};
+
+window.post=async(type,text)=>{
+if(!user) return view("login");
+if(!text) return;
+await sb.from("posts").insert({
+type,text,
+user_id:user.id,
+user_email:user.email
+});
+await sb.rpc("increment_trust",{uid:user.id,mail:user.email}).catch(()=>{});
+render();
+};
 
 async function render(){
-const {data}=await sb.from("posts").select("*").order("created_at",{ascending:false})
-feed.innerHTML=""
-data?.forEach(p=>{
-feed.innerHTML+=`<div>${p.type}: ${p.text} (${p.user_email})</div>`
-})
+const {data=[]}=await sb.from("posts").select("*").order("created_at",{ascending:false});
+feed.innerHTML="";
+data.forEach(p=>{
+feed.innerHTML+=`<div class="feed-item">${p.type}: ${p.text} (${p.user_email})</div>`;
+});
 }
 
-init()
+loadUser();
 
+})();
 </script>
 
 </body>
