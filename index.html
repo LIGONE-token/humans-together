@@ -5,92 +5,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- GOOGLE VERIFICATION -->
 <meta name="google-site-verification" content="YRRh6jvBiPgsqxbRXpFUyRfganm4lP1V1yTXE7MvlhQ" />
 
-<!-- PRIMARY SEO -->
 <title>Humans Together | Global Human Support Network</title>
-<meta name="description" content="Humans Together connects people worldwide to request help, offer support, and build trusted human connections. Community activity, profiles, and a trust-based reputation system." />
-<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+<meta name="description" content="Humans Together connects people worldwide to request help, offer support, and build trusted human connections." />
+<meta name="robots" content="index,follow" />
 <link rel="canonical" href="https://ligone-token.github.io/humans-together/" />
 
-<!-- LANGUAGE -->
-<meta http-equiv="content-language" content="en" />
-<link rel="alternate" hreflang="en" href="https://ligone-token.github.io/humans-together/" />
-
-<!-- THEME -->
-<meta name="theme-color" content="#10b981" />
-<link rel="icon" href="favicon.png" />
-
-<!-- OPEN GRAPH -->
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content="Humans Together" />
-<meta property="og:title" content="Humans Together | Global Human Support Network" />
-<meta property="og:description" content="Request help, offer support, and build trust worldwide. Community activity, profiles, and a reputation system." />
-<meta property="og:url" content="https://ligone-token.github.io/humans-together/" />
+<meta property="og:title" content="Humans Together" />
+<meta property="og:description" content="Global human support network." />
 <meta property="og:image" content="https://ligone-token.github.io/humans-together/og-image.png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:locale" content="en_US" />
 
-<!-- TWITTER -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Humans Together | Global Human Support Network" />
-<meta name="twitter:description" content="Request help, offer support, and build trust worldwide." />
-<meta name="twitter:image" content="https://ligone-token.github.io/humans-together/og-image.png" />
-
-<!-- STRUCTURED DATA -->
-<script type="application/ld+json">
-{
- "@context":"https://schema.org",
- "@type":"WebSite",
- "name":"Humans Together",
- "url":"https://ligone-token.github.io/humans-together/",
- "description":"Global community platform where people request help and offer support worldwide."
-}
-</script>
-
-<script type="application/ld+json">
-{
- "@context":"https://schema.org",
- "@type":"Organization",
- "name":"Humans Together",
- "url":"https://ligone-token.github.io/humans-together/",
- "logo":"https://ligone-token.github.io/humans-together/og-image.png"
-}
-</script>
-
-<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 
 <style>
-:root{
---bg:#f6f8fb;
---card:#ffffff;
---text:#111827;
---muted:#6b7280;
---line:#e5e7eb;
---green:#10b981;
---blue:#2563eb;
-}
-body{margin:0;font-family:system-ui;background:var(--bg);color:var(--text);}
-.wrap{max-width:760px;margin:auto;padding:20px;}
-header{text-align:center;}
-.tagline{color:var(--green);font-weight:700;}
-.desc{color:var(--muted);margin-bottom:20px;}
-.actions{display:grid;gap:10px;margin:20px 0;}
-.btn{border:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;font-size:14px}
-.btn-help{background:var(--green);color:white}
-.btn-offer{background:var(--blue);color:white}
-.btn-neutral{background:#e5e7eb}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px;}
+body{margin:0;font-family:system-ui;background:#f6f8fb}
+.wrap{max-width:760px;margin:auto;padding:20px}
+.card{background:white;border:1px solid #e5e7eb;border-radius:12px;padding:12px;margin-top:12px}
 .hidden{display:none}
-.feed-item{padding:10px 0;border-bottom:1px solid var(--line)}
-.badge{font-size:11px;font-weight:700;padding:3px 7px;border-radius:999px;margin-left:6px}
-.trust-low{background:#fee2e2}
-.trust-mid{background:#fef3c7}
-.trust-high{background:#dcfce7}
 </style>
 
 </head>
@@ -98,147 +32,76 @@ header{text-align:center;}
 
 <div class="wrap">
 
-<header>
 <h1>Humans Together</h1>
-<div class="tagline">Together we help</div>
-<p class="desc">You are not alone. A global space where people connect and support each other.</p>
-</header>
 
-<section class="actions">
-<button class="btn btn-help" onclick="view('help')">I need help</button>
-<button class="btn btn-offer" onclick="view('offer')">I want to help</button>
-<button class="btn btn-neutral" onclick="view('activity')">Community Activity</button>
-<button class="btn btn-neutral" onclick="view('dashboard')">Dashboard</button>
-<button class="btn btn-neutral" onclick="view('profile')">Profile</button>
-<button class="btn btn-neutral" onclick="view('login')">Login</button>
-<button class="btn btn-neutral" onclick="view('home')">Home</button>
-</section>
-
-<div id="home">
-<div class="card"><h2>🌍 Live Community Activity</h2><div id="homeFeed"></div></div>
-</div>
+<button onclick="view('login')">Login</button>
+<button onclick="view('help')">Need help</button>
+<button onclick="view('offer')">Offer help</button>
 
 <div id="login" class="hidden">
-<div class="card">
-<h2>Login</h2>
-<input id="email" placeholder="Email" style="width:100%;padding:10px">
+<input id="email" placeholder="Email">
 <button onclick="login()">Login</button>
-</div>
 </div>
 
 <div id="help" class="hidden">
-<div class="card">
-<h2>I need help</h2>
-<input id="helpText" style="width:100%;padding:10px">
-<button onclick="post('HELP',helpText.value)">Submit</button>
-</div>
+<input id="helpText">
+<button onclick="post('HELP',helpText.value)">Send</button>
 </div>
 
 <div id="offer" class="hidden">
+<input id="offerText">
+<button onclick="post('OFFER',offerText.value)">Send</button>
+</div>
+
 <div class="card">
-<h2>I want to help</h2>
-<input id="offerText" style="width:100%;padding:10px">
-<button onclick="post('OFFER',offerText.value)">Submit</button>
+<h3>Community</h3>
+<div id="feed"></div>
 </div>
-</div>
-
-<div id="activity" class="hidden">
-<div class="card"><h2>Community Activity</h2><div id="activityFeed"></div></div>
-</div>
-
-<div id="dashboard" class="hidden">
-<div class="card"><h2>Dashboard</h2><div id="stats"></div></div>
-<div class="card"><h3>Your Posts</h3><div id="myPosts"></div></div>
-</div>
-
-<div id="profile" class="hidden">
-<div class="card"><h2>Your Profile</h2><div id="profileBox"></div></div>
-</div>
-
-<div id="session" style="text-align:center;margin-top:20px"></div>
 
 </div>
 
 <script>
 
+const feed=document.getElementById("feed")
+const email=document.getElementById("email")
+const helpText=document.getElementById("helpText")
+const offerText=document.getElementById("offerText")
+
 function view(id){
-["home","login","help","offer","activity","dashboard","profile"]
-.forEach(v=>document.getElementById(v).classList.add("hidden"))
+["login","help","offer"].forEach(v=>document.getElementById(v).classList.add("hidden"))
 document.getElementById(id).classList.remove("hidden")
 }
 
-let currentUser=null
+let user=null
 
-async function loadSession(){
-const { data }=await sb.auth.getUser()
-currentUser=data?.user||null
-renderAll()
+async function init(){
+const {data}=await sb.auth.getUser()
+user=data?.user||null
+render()
 }
-
-sb.auth.onAuthStateChange((_e,s)=>{
-currentUser=s?.user||null
-renderAll()
-})
+sb.auth.onAuthStateChange((_e,s)=>{user=s?.user||null;render()})
 
 async function login(){
-const mail=email.value.trim()
-if(!mail)return
-await sb.auth.signInWithOtp({email:mail,options:{emailRedirectTo:location.href}})
+await sb.auth.signInWithOtp({email:email.value,options:{emailRedirectTo:location.href}})
 alert("Check email")
 }
 
-async function logout(){await sb.auth.signOut()}
-
-function trustBadge(score){
-if(score>=10)return `<span class="badge trust-high">HIGH TRUST</span>`
-if(score>=5)return `<span class="badge trust-mid">TRUSTED</span>`
-return `<span class="badge trust-low">NEW</span>`
-}
-
 async function post(type,text){
-if(!currentUser){view("login");return}
-if(!text.trim())return
-await sb.from("posts").insert({
-type,text,
-user_id:currentUser.id,
-user_email:currentUser.email
+if(!user)return view("login")
+await sb.from("posts").insert({type,text,user_id:user.id,user_email:user.email})
+await sb.rpc("increment_trust",{uid:user.id,mail:user.email}).catch(()=>{})
+render()
+}
+
+async function render(){
+const {data}=await sb.from("posts").select("*").order("created_at",{ascending:false})
+feed.innerHTML=""
+data?.forEach(p=>{
+feed.innerHTML+=`<div>${p.type}: ${p.text} (${p.user_email})</div>`
 })
-await sb.rpc("increment_trust",{uid:currentUser.id,mail:currentUser.email}).catch(()=>{})
-renderAll()
 }
 
-async function renderAll(){
-const { data:posts }=await sb.from("posts").select("*").order("created_at",{ascending:false})
-const { data:profiles }=await sb.from("profiles").select("*")
-const trustMap={}
-profiles?.forEach(p=>trustMap[p.id]=p.trust)
-
-homeFeed.innerHTML=""
-activityFeed.innerHTML=""
-myPosts.innerHTML=""
-
-posts?.forEach(x=>{
-const trust=trustMap[x.user_id]||0
-const html=`<div class="feed-item">
-<b>${x.type}</b><br>
-${x.text}<br>
-<small>${new Date(x.created_at).toLocaleString()}</small><br>
-User: ${x.user_email} ${trustBadge(trust)}
-</div>`
-homeFeed.innerHTML+=html
-activityFeed.innerHTML+=html
-if(currentUser&&x.user_id===currentUser.id)myPosts.innerHTML+=html
-})
-
-if(currentUser){
-const t=trustMap[currentUser.id]||0
-session.innerHTML="Logged in as "+currentUser.email+"<br><button onclick='logout()'>Logout</button>"
-stats.innerHTML="Total Posts: "+posts.length+"<br>Your Trust: "+t
-profileBox.innerHTML="Email: "+currentUser.email+"<br>Reputation: "+t
-}
-}
-
-loadSession()
+init()
 
 </script>
 
