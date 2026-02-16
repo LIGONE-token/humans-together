@@ -78,7 +78,20 @@ header{text-align:center;}
 .tagline{color:var(--green);font-weight:700;}
 .desc{color:var(--muted);margin-bottom:20px;}
 .actions{display:grid;gap:10px;margin:20px 0;}
-.btn{border:none;border-radius:12px;padding:14px;font-weight:700;cursor:pointer}
+.btn{
+border:none;
+border-radius:10px;
+padding:10px 12px;
+font-weight:600;
+cursor:pointer;
+font-size:14px;
+transition:all .15s ease;
+}
+
+.btn:hover{
+transform:translateY(-1px);
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
 .btn-help{background:var(--green);color:white}
 .btn-offer{background:var(--blue);color:white}
 .btn-neutral{background:#e5e7eb}
