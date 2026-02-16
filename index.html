@@ -252,12 +252,11 @@ async function post(type, text){
 
   try{
 
-    // speichern
     const { data, error } = await sb
       .from("posts")
       .insert({
-        type,
-        text,
+        type: type,
+        text: text,
         user_id: currentUser.id,
         user_email: currentUser.email
       })
@@ -269,7 +268,7 @@ async function post(type, text){
       return
     }
 
-    // trust erhöhen (optional)
+    // Trust erhöhen (optional)
     await sb.rpc("increment_trust",{
       uid: currentUser.id,
       mail: currentUser.email
@@ -280,12 +279,12 @@ async function post(type, text){
     if(type === "OFFER") document.getElementById("offerText").value = ""
 
     // Erfolgsmeldung
-    alert("Your post was published successfully")
+    alert("Post published successfully")
 
-    // neu rendern
+    // Feed neu laden
     await renderAll()
 
-    // optional zurück zur Activity Ansicht
+    // Activity anzeigen
     view("activity")
 
   }catch(err){
@@ -293,6 +292,7 @@ async function post(type, text){
     console.error(err)
   }
 }
+
 
 // ---------- RENDER ----------
 
