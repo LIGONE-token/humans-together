@@ -191,17 +191,15 @@ const mail = email.value.trim()
 if(!mail) return
 
 await sb.auth.signInWithOtp({
-email: mail,
-options:{ emailRedirectTo: location.href }
+  email: mail,
+  options:{
+    emailRedirectTo: "https://ligone-token.github.io/humans-together/"
+  }
 })
 
 alert("Check email for login link")
 }
 
-async function logout(){
-await sb.auth.signOut()
-location.reload()
-}
 
 // ---------- TRUST BADGE ----------
 
