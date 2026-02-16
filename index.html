@@ -292,6 +292,20 @@ profileBox.innerHTML="Login to see your profile."
 }
 
 loadSession()
+let currentUser = null
+
+async function loadSession(){
+  const { data } = await sb.auth.getUser()
+  currentUser = data?.user || null
+  renderAll()
+}
+
+sb.auth.onAuthStateChange((_event, session)=>{
+  currentUser = session?.user || null
+  renderAll()
+})
+
+loadSession()
 
 </script>
 <footer style="text-align:center;margin:40px 0;color:#6b7280">
