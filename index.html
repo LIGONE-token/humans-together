@@ -61,6 +61,8 @@ header{text-align:center;}
 .trust-mid{background:#fef3c7}
 .trust-high{background:#dcfce7}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 
 </head>
 <body>
@@ -152,30 +154,46 @@ You are not alone. A global space where people connect and support each other.
 </div>
 
 <script>
+
 function view(id){
 ["home","login","help","offer","activity","dashboard","profile"]
 .forEach(v=>document.getElementById(v).classList.add("hidden"))
 document.getElementById(id).classList.remove("hidden")
 }
 
-function users(){return JSON.parse(localStorage.getItem("users")||"{}")}
-function saveUsers(u){localStorage.setItem("users",JSON.stringify(u))}
+let currentUser = null
 
-function login(){
-const mail=email.value.trim()
-if(!mail) return
-let u=users()
-if(!u[mail]) u[mail]={trust:0}
-saveUsers(u)
-localStorage.setItem("user",mail)
+// ---------- AUTH ----------
+
+sb.auth.onAuthStateChange((_e,session)=>{
+currentUser = session?.user || null
 renderAll()
-view("home")
+})
+
+async function loadSession(){
+const { data } = await sb.auth.getUser()
+currentUser = data?.user || null
+renderAll()
 }
 
-function logout(){
-localStorage.removeItem("user")
+async function login(){
+const mail = email.value.trim()
+if(!mail) return
+
+await sb.auth.signInWithOtp({
+email: mail,
+options:{ emailRedirectTo: location.href }
+})
+
+alert("Check email for login link")
+}
+
+async function logout(){
+await sb.auth.signOut()
 location.reload()
 }
+
+// ---------- TRUST BADGE ----------
 
 function trustBadge(score){
 if(score>=10) return `<span class="badge trust-high">HIGH TRUST</span>`
@@ -183,58 +201,81 @@ if(score>=5) return `<span class="badge trust-mid">TRUSTED</span>`
 return `<span class="badge trust-low">NEW</span>`
 }
 
-function post(type,text){
-if(!localStorage.getItem("user")){view("login");return}
+// ---------- POST ----------
+
+async function post(type,text){
+if(!currentUser){ view("login"); return }
 if(!text.trim()) return
 
-let p=JSON.parse(localStorage.getItem("posts")||"[]")
-let user=localStorage.getItem("user")
+await sb.from("posts").insert({
+type,
+text,
+user_id: currentUser.id,
+user_email: currentUser.email
+})
 
-p.unshift({type,text,user,time:new Date().toLocaleString()})
-localStorage.setItem("posts",JSON.stringify(p))
-
-let u=users()
-u[user].trust++
-saveUsers(u)
+await sb.rpc("increment_trust",{
+uid: currentUser.id,
+mail: currentUser.email
+}).catch(()=>{})
 
 renderAll()
 }
 
-function renderAll(){
-let p=JSON.parse(localStorage.getItem("posts")||"[]")
-let u=localStorage.getItem("user")
-let us=users()
+// ---------- RENDER ----------
+
+async function renderAll(){
+
+const { data: posts=[] } = await sb
+.from("posts")
+.select("*")
+.order("created_at",{ascending:false})
+
+const { data: profiles=[] } = await sb.from("profiles").select("*")
+
+const trustMap={}
+profiles.forEach(p=>trustMap[p.id]=p.trust)
 
 homeFeed.innerHTML=""
 activityFeed.innerHTML=""
 myPosts.innerHTML=""
 
-p.forEach(x=>{
-let trust=us[x.user]?.trust||0
-let html=
+posts.forEach(p=>{
+
+const trust = trustMap[p.user_id] || 0
+
+const html =
 `<div class="feed-item">
-<b>${x.type}</b><br>
-${x.text}<br>
-<small>${x.time}</small><br>
-User: ${x.user} ${trustBadge(trust)}
+<b>${p.type}</b><br>
+${p.text}<br>
+<small>${new Date(p.created_at).toLocaleString()}</small><br>
+User: ${p.user_email} ${trustBadge(trust)}
 </div>`
-homeFeed.innerHTML+=html
-activityFeed.innerHTML+=html
-if(u && x.user===u) myPosts.innerHTML+=html
+
+homeFeed.innerHTML += html
+activityFeed.innerHTML += html
+
+if(currentUser && p.user_id===currentUser.id)
+myPosts.innerHTML += html
 })
 
-if(u){
-session.innerHTML="Logged in as "+u+
+if(currentUser){
+
+const t = trustMap[currentUser.id] || 0
+
+session.innerHTML =
+"Logged in as "+currentUser.email+
 "<br><button onclick='logout()'>Logout</button>"
 
-stats.innerHTML=
-"Total Posts: "+p.length+
-"<br>Your Trust: "+us[u].trust+" "+trustBadge(us[u].trust)
+stats.innerHTML =
+"Total Posts: "+posts.length+
+"<br>Your Trust: "+t+" "+trustBadge(t)
 
-profileBox.innerHTML=
-"Email: "+u+
-"<br>Reputation: "+us[u].trust+
-"<br>Account Status: "+trustBadge(us[u].trust)
+profileBox.innerHTML =
+"Email: "+currentUser.email+
+"<br>Reputation: "+t+
+"<br>Account Status: "+trustBadge(t)
+
 }else{
 session.innerHTML=""
 stats.innerHTML="Login to see your dashboard."
@@ -242,7 +283,8 @@ profileBox.innerHTML="Login to see your profile."
 }
 }
 
-renderAll()
+loadSession()
+
 </script>
 
 </body>
