@@ -188,10 +188,25 @@ renderAll()
 })
 
 async function loadSession(){
-const { data } = await sb.auth.getUser()
-currentUser = data?.user || null
-renderAll()
+
+  // Supabase Session sicher aus Redirect übernehmen
+  const { data: { session } } = await sb.auth.getSession()
+
+  if(session){
+    currentUser = session.user
+  }else{
+    const { data } = await sb.auth.getUser()
+    currentUser = data?.user || null
+  }
+
+  // Magic Link Token aus URL entfernen (saubere URL)
+  if(window.location.hash.includes("access_token")){
+    history.replaceState({}, document.title, window.location.pathname)
+  }
+
+  renderAll()
 }
+
 
 async function login(){
 const mail = email.value.trim()
