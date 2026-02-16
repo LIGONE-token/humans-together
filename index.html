@@ -100,7 +100,6 @@ You are not alone. A global space where people connect and support each other.
 </p>
 
 </div>
-</div>
 
 
 <div class="card">
@@ -290,20 +289,6 @@ stats.innerHTML="Login to see your dashboard."
 profileBox.innerHTML="Login to see your profile."
 }
 }
-
-loadSession()
-let currentUser = null
-
-async function loadSession(){
-  const { data } = await sb.auth.getUser()
-  currentUser = data?.user || null
-  renderAll()
-}
-
-sb.auth.onAuthStateChange((_event, session)=>{
-  currentUser = session?.user || null
-  renderAll()
-})
 
 loadSession()
 
