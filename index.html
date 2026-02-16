@@ -88,26 +88,25 @@ You are not alone. A global space where people connect and support each other.
 </section>
 
 <div id="home">
+
 <div class="card">
 <h2>🌱 Community Support</h2>
 <p>Independent initiatives supporting cooperation and social stability.</p>
 
 <p style="margin-top:8px; font-size:13px;">
-  <a href="ligone.html">LIGONE</a> ·
-  <a href="https://ligone.ch" target="_blank">ligone.ch</a> ·
-  <a href="https://ligone-token.github.io/ligone-web/gewinnspiel.html" target="_blank">Jackpot</a> ·
-  <a href="https://ligone-token.github.io/ligone-web/" target="_blank">Info</a>
+<a href="ligone.html">LIGONE</a> ·
+<a href="https://ligone.ch" target="_blank">ligone.ch</a> ·
+<a href="https://ligone-token.github.io/ligone-web/gewinnspiel.html" target="_blank">Jackpot</a> ·
+<a href="https://ligone-token.github.io/ligone-web/" target="_blank">Info</a>
 </p>
-
 </div>
-
 
 <div class="card">
 <h2>🌍 Live Community Activity</h2>
 <div id="homeFeed"></div>
 </div>
-</div>
 
+</div>
 <div id="login" class="hidden">
 <div class="card">
 <h2>Login</h2>
@@ -198,6 +197,11 @@ await sb.auth.signInWithOtp({
 
 alert("Check email for login link")
 }
+  async function logout(){
+  await sb.auth.signOut()
+  location.reload()
+}
+
 
 
 // ---------- TRUST BADGE ----------
