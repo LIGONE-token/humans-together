@@ -1,23 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- GOOGLE VERIFICATION -->
 <meta name="google-site-verification" content="YRRh6jvBiPgsqxbRXpFUyRfganm4lP1V1yTXE7MvlhQ" />
 
+<!-- PRIMARY SEO -->
 <title>Humans Together | Global Human Support Network</title>
+<meta name="description" content="Humans Together connects people worldwide to request help, offer support, and build trusted human connections. Community activity, profiles, and a trust-based reputation system." />
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+<link rel="canonical" href="https://ligone-token.github.io/humans-together/" />
 
-<meta name="description"
-content="Humans Together connects people worldwide to help each other. Find support, offer help, and build stronger communities everywhere." />
+<!-- LANGUAGE / LOCALE -->
+<meta http-equiv="content-language" content="en" />
+<link rel="alternate" hreflang="en" href="https://ligone-token.github.io/humans-together/" />
 
-<link rel="canonical" href="https://ligone-token.github.io/humans-together/">
+<!-- THEME / ICONS (optional files if you have them) -->
+<meta name="theme-color" content="#10b981" />
+<link rel="icon" href="favicon.png" />
 
+<!-- OPEN GRAPH -->
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Humans Together" />
-<meta property="og:description" content="Together we help. A global space where people support each other." />
+<meta property="og:site_name" content="Humans Together" />
+<meta property="og:title" content="Humans Together | Global Human Support Network" />
+<meta property="og:description" content="Request help, offer support, and build trust worldwide. Community activity, profiles, and a reputation system." />
 <meta property="og:url" content="https://ligone-token.github.io/humans-together/" />
 <meta property="og:image" content="https://ligone-token.github.io/humans-together/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+
+<!-- TWITTER -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Humans Together | Global Human Support Network" />
+<meta name="twitter:description" content="Request help, offer support, and build trust worldwide." />
+<meta name="twitter:image" content="https://ligone-token.github.io/humans-together/og-image.png" />
+
+<!-- STRUCTURED DATA: WEBSITE -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Humans Together",
+  "url": "https://ligone-token.github.io/humans-together/",
+  "description": "Global community platform where people request help, offer support, and build trusted human connections worldwide.",
+  "inLanguage": "en"
+}
+</script>
+
+<!-- STRUCTURED DATA: ORGANIZATION -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Humans Together",
+  "url": "https://ligone-token.github.io/humans-together/",
+  "logo": "https://ligone-token.github.io/humans-together/og-image.png"
+}
+</script>
 
 <style>
 :root{
@@ -35,18 +78,22 @@ header{text-align:center;}
 .tagline{color:var(--green);font-weight:700;}
 .desc{color:var(--muted);margin-bottom:20px;}
 .actions{display:grid;gap:10px;margin:20px 0;}
-.btn{border:none;border-radius:12px;padding:14px;font-weight:700;cursor:pointer;}
+.btn{border:none;border-radius:12px;padding:14px;font-weight:700;cursor:pointer}
 .btn-help{background:var(--green);color:white}
 .btn-offer{background:var(--blue);color:white}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:10px;}
-.feed-item{padding:10px 0;border-bottom:1px solid var(--line);}
-.badge{font-size:11px;font-weight:800;padding:4px 8px;border-radius:999px;border:1px solid var(--line);}
-.badge-help{background:#ecfdf5;color:#065f46;}
-.badge-offer{background:#eff6ff;color:#1e3a8a;}
+.btn-neutral{background:#e5e7eb}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px;}
+.hidden{display:none}
+.feed-item{padding:10px 0;border-bottom:1px solid var(--line)}
+.badge{font-size:11px;font-weight:700;padding:3px 7px;border-radius:999px;margin-left:6px}
+.trust-low{background:#fee2e2}
+.trust-mid{background:#fef3c7}
+.trust-high{background:#dcfce7}
 </style>
-</head>
 
+</head>
 <body>
+
 <div class="wrap">
 
 <header>
@@ -58,89 +105,180 @@ You are not alone. A global space where people connect and support each other.
 </header>
 
 <section class="actions">
-<button class="btn btn-help" onclick="location.href='help.html'">I need help</button>
-<button class="btn btn-offer" onclick="location.href='offer.html'">I want to help</button>
-<button class="btn" onclick="location.href='activity.html'">Community Activity</button>
+<button class="btn btn-help" onclick="view('help')">I need help</button>
+<button class="btn btn-offer" onclick="view('offer')">I want to help</button>
+<button class="btn btn-neutral" onclick="view('activity')">Community Activity</button>
+<button class="btn btn-neutral" onclick="view('dashboard')">Dashboard</button>
+<button class="btn btn-neutral" onclick="view('profile')">Profile</button>
+<button class="btn btn-neutral" onclick="view('login')">Login</button>
+<button class="btn btn-neutral" onclick="view('home')">Home</button>
 </section>
 
+<!-- HOME -->
+<div id="home">
 <div class="card">
 <h2>🌱 Community Support</h2>
-<p>
-Humans Together is supported by independent community initiatives that believe in cooperation,
-fairness and long-term social stability.
-</p>
-<a href="ligone.html" style="font-weight:800;color:#2563eb;text-decoration:none">
-Learn about LIGONE LIG1 →
-</a>
+<p>Independent initiatives supporting cooperation and social stability.</p>
 </div>
 
 <div class="card">
 <h2>🌍 Live Community Activity</h2>
-<div id="feed"></div>
+<div id="homeFeed"></div>
+</div>
 </div>
 
-<div id="session"></div>
-
+<!-- LOGIN -->
+<div id="login" class="hidden">
+<div class="card">
+<h2>Login</h2>
+<input id="email" placeholder="Email" style="width:100%;padding:10px">
+<button onclick="login()">Login</button>
+</div>
 </div>
 
-<!-- SUPABASE EINMAL LADEN -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- HELP -->
+<div id="help" class="hidden">
+<div class="card">
+<h2>I need help</h2>
+<input id="helpText" placeholder="Describe your request" style="width:100%;padding:10px">
+<button onclick="post('HELP',helpText.value)">Submit</button>
+</div>
+</div>
+
+<!-- OFFER -->
+<div id="offer" class="hidden">
+<div class="card">
+<h2>I want to help</h2>
+<input id="offerText" placeholder="Describe your offer" style="width:100%;padding:10px">
+<button onclick="post('OFFER',offerText.value)">Submit</button>
+</div>
+</div>
+
+<!-- ACTIVITY -->
+<div id="activity" class="hidden">
+<div class="card">
+<h2>Community Activity</h2>
+<div id="activityFeed"></div>
+</div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+<div class="card">
+<h2>Dashboard</h2>
+<div id="stats"></div>
+</div>
+
+<div class="card">
+<h3>Your Posts</h3>
+<div id="myPosts"></div>
+</div>
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="hidden">
+<div class="card">
+<h2>Your Profile</h2>
+<div id="profileBox"></div>
+</div>
+</div>
+
+<div id="session" style="text-align:center;margin-top:20px"></div>
+
+</div>
 
 <script>
-const supabase = window.supabase.createClient(
-"https://hwpeegcsdgxgcybuosfv.supabase.co",
-"sb_publishable_LhuHoUS_DR4o2Pp3aqbNBw_IXwHo2fD"
-);
-
-async function loadActivity(){
-const { data, error } = await supabase
-.schema("humans")
-.from("posts")
-.select("type,title,region,created_at")
-.order("created_at",{ascending:false})
-.limit(5);
-
-const feed=document.getElementById("feed");
-feed.innerHTML="";
-
-if(error){ feed.innerHTML="Activity unavailable"; return; }
-if(!data || data.length===0){ feed.innerHTML="No activity yet"; return; }
-
-data.forEach(post=>{
-const badge = post.type==="help_request"
-? '<span class="badge badge-help">HELP REQUEST</span>'
-: '<span class="badge badge-offer">HELP OFFER</span>';
-
-const div=document.createElement("div");
-div.className="feed-item";
-div.innerHTML=`
-<strong>${post.region || ""}</strong><br>
-${post.title || ""}<br>
-${badge}`;
-feed.appendChild(div);
-});
+function view(id){
+["home","login","help","offer","activity","dashboard","profile"]
+.forEach(v=>document.getElementById(v).classList.add("hidden"))
+document.getElementById(id).classList.remove("hidden")
 }
 
-async function showSession(){
-const { data:{ user } } = await supabase.auth.getUser();
-if(!user) return;
+function users(){return JSON.parse(localStorage.getItem("users")||"{}")}
+function saveUsers(u){localStorage.setItem("users",JSON.stringify(u))}
 
-const div=document.getElementById("session");
-div.style.textAlign="center";
-div.style.marginTop="20px";
-div.innerHTML=`
-Logged in as ${user.email}
-<br><br>
-<button onclick="logout()">Logout</button>`;
+function login(){
+const mail=email.value.trim()
+if(!mail) return
+let u=users()
+if(!u[mail]) u[mail]={trust:0}
+saveUsers(u)
+localStorage.setItem("user",mail)
+renderAll()
+view("home")
 }
 
-async function logout(){
-await supabase.auth.signOut();
-location.reload();
+function logout(){
+localStorage.removeItem("user")
+location.reload()
 }
 
-loadActivity();
-showSession();
+function trustBadge(score){
+if(score>=10) return `<span class="badge trust-high">HIGH TRUST</span>`
+if(score>=5) return `<span class="badge trust-mid">TRUSTED</span>`
+return `<span class="badge trust-low">NEW</span>`
+}
+
+function post(type,text){
+if(!localStorage.getItem("user")){view("login");return}
+if(!text.trim()) return
+
+let p=JSON.parse(localStorage.getItem("posts")||"[]")
+let user=localStorage.getItem("user")
+
+p.unshift({type,text,user,time:new Date().toLocaleString()})
+localStorage.setItem("posts",JSON.stringify(p))
+
+let u=users()
+u[user].trust++
+saveUsers(u)
+
+renderAll()
+}
+
+function renderAll(){
+let p=JSON.parse(localStorage.getItem("posts")||"[]")
+let u=localStorage.getItem("user")
+let us=users()
+
+homeFeed.innerHTML=""
+activityFeed.innerHTML=""
+myPosts.innerHTML=""
+
+p.forEach(x=>{
+let trust=us[x.user]?.trust||0
+let html=
+`<div class="feed-item">
+<b>${x.type}</b><br>
+${x.text}<br>
+<small>${x.time}</small><br>
+User: ${x.user} ${trustBadge(trust)}
+</div>`
+homeFeed.innerHTML+=html
+activityFeed.innerHTML+=html
+if(u && x.user===u) myPosts.innerHTML+=html
+})
+
+if(u){
+session.innerHTML="Logged in as "+u+
+"<br><button onclick='logout()'>Logout</button>"
+
+stats.innerHTML=
+"Total Posts: "+p.length+
+"<br>Your Trust: "+us[u].trust+" "+trustBadge(us[u].trust)
+
+profileBox.innerHTML=
+"Email: "+u+
+"<br>Reputation: "+us[u].trust+
+"<br>Account Status: "+trustBadge(us[u].trust)
+}else{
+session.innerHTML=""
+stats.innerHTML="Login to see your dashboard."
+profileBox.innerHTML="Login to see your profile."
+}
+}
+
+renderAll()
 </script>
 
 </body>
